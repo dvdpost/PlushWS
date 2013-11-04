@@ -1,0 +1,21 @@
+========================================================================
+Microsoft .NET Framework
+
+1. Put CountryLookup.cs and CountryLookupTest.cs together under the same
+directory;
+2. Open a DOS window and change the 'cd' to the above directory;
+3. Type in:
+csc /R:System.dll /nowarn:168 /target:exe /out:test.exe CountryLookupTest.cs
+CountryLookup.cs
+4. You will need to set the system path if 'csc' is reported as a
+non-recognizable command. Run the following command in DOS:
+path %path%;C:\WINNT\Microsoft.NET\Framework\v1.0.3705
+(The current released MS .NET framwork version is v1.0.3705)
+
+Additional MS C# compiler information can be found @
+http://www.dotnet101.com/articles/art034_CompOptions.asp
+
+========================================================================
+Ximian Mono .NET Framework (Open Source)
+
+We haven't tested GeoIP C# under Mono, but it should work.

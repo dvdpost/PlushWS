@@ -1,0 +1,15 @@
+1.2 Oct 22th, 2008
+	- Fix wrong exception for ip's with /32 netmask. 
+		In GeoIPCountry.cs( FindCountryCode ) ( Boris Zentner )
+	- Replaced addr.Address with addr.GetAddressBytes()
+		since IPAddress.Address property was deprecated in .NET 2.0 ( Boris Zentner )
+	- Fix false positive 'seek country error' for ip's with /32 netmask. 
+		In CountryLookup.cs ( seekCountry ). ( Boris Zentner )
+	 
+1.1 June 30th, 2008
+	- Adapted code so that it can be used as class, renamed to GeoIPCountry.cs ( Bart King )
+
+1.0 April 1st, 2008
+	- Added AX/Aland Islands, GG/Guernsey, IM/Isle of Man, JE/Jersey (ISO-3166-1 changes)
+	- Replaced CS/Serbia and Montenegro with RS/Serbia, removed ZR/Zaire, added ME/Montenegro
+	- TP/East Timor changed to TL/Timor-Leste, reflecting changes in ISO-3166
