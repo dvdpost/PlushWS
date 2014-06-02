@@ -25,6 +25,35 @@ namespace PlushContract
     }
 
     [DataContract]
+    public class VodConfirmationEmail // returns result for Add methods
+    {
+        [DataMember]
+        public string slug { get; set; } // director's slug
+
+        [DataMember]
+        public string directors_name { get; set; } //director's name
+
+        [DataMember]
+        public string imdb_id { get; set; } //movie's imdb_id
+
+        [DataMember]
+        public decimal? rate { get; set; } // movie's rating
+
+        [DataMember]
+        public string products_name { get; set; } //products's name
+
+        [DataMember]
+        public string products_year { get; set; } //products's year
+
+        [DataMember]
+        public string products_image_big { get; set; } //products's year
+
+        [DataMember]
+        public string products_description { get; set; } //products's year        
+
+    }
+
+    [DataContract]
     public class vodaudsub
     {
         [DataMember]
@@ -127,6 +156,40 @@ namespace PlushContract
 
         [DataMember]
         public string name { get; set; }
+
+        [DataMember]
+        public string img { get; set; }
+
+        [DataMember]
+        public decimal? rate { get; set; }
+
+        [DataMember]
+        public string trailer_aud_sub { get; set; }
+
+        [DataMember]
+        public string trailer_token { get; set; }
+
+        [DataMember]
+        public decimal? price { get; set; }
+    }
+
+    [DataContract]
+    public class FreeMovie
+    {
+        [DataMember]
+        public int imdb_id { get; set; }
+
+        [DataMember]
+        public int? disk_id { get; set; }
+
+        [DataMember]
+        public int? season_id { get; set; }
+
+        [DataMember]
+        public string name { get; set; }
+
+        [DataMember]
+        public string dcrp { get; set; }
 
         [DataMember]
         public string img { get; set; }

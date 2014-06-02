@@ -35,8 +35,8 @@ namespace PlushContract
         List<MostDiscussedMovies> EndgetMostDiscussed(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getMovieDetails", ReplyAction = "getMovieDetails")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMovieDetails?lngid={lngid}&imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMovieDetails?lngid={lngid}&imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn, int device, AsyncCallback callback, object asyncState);
 
         md EndgetMovieDetails(IAsyncResult result);
 
@@ -67,8 +67,8 @@ namespace PlushContract
         CustomerDetails EndgetCustomerDetails(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getVodUrl", ReplyAction = "getVodUrl")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getVodUrl?vodid={vodid}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetVodUrl(int vodid, int cn, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getVodUrl?vodid={vodid}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetVodUrl(int vodid, int cn, int device, AsyncCallback callback, object asyncState);
 
         string EndgetVodUrl(IAsyncResult result);
 
@@ -85,8 +85,8 @@ namespace PlushContract
         List<ListCategory> EndgetSubCategories(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getCategoryMovies", ReplyAction = "getCategoryMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getCategoryMovies?ctgid={ctgid}&lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetCategoryMovies(int ctgid, int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getCategoryMovies?ctgid={ctgid}&lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetCategoryMovies(int ctgid, int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetCategoryMovies(IAsyncResult result);
 
@@ -163,19 +163,19 @@ namespace PlushContract
         List<MyListMovie> EndgetProductsAtCustomer(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "addMovieSeen", ReplyAction = "addMovieSeen")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieSeen?imdb_id_serie={imdb_id_serie}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BeginaddMovieSeen(int imdb_id_serie, int disk_id, int season_id, int cn, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieSeen?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BeginaddMovieSeen(int imdb_id, int disk_id, int season_id, int cn, AsyncCallback callback, object asyncState);
 
         int EndaddMovieSeen(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "addMovieUninterested", ReplyAction = "addMovieUninterested")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieUninterested?imdb_id_serie={imdb_id_serie}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BeginaddMovieUninterested(int imdb_id_serie, int disk_id, int season_id, int cn, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieUninterested?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BeginaddMovieUninterested(int imdb_id, int disk_id, int season_id, int cn, AsyncCallback callback, object asyncState);
 
         int EndaddMovieUninterested(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "addMovieRate", ReplyAction = "addMovieRate")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieRate?imdb_id_serie={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&rate={rate}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieRate?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&rate={rate}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         IAsyncResult BeginaddMovieRate(int imdb_id, int disk_id, int season_id, int cn, int rate, AsyncCallback callback, object asyncState);
 
         int EndaddMovieRate(IAsyncResult result);
@@ -193,44 +193,44 @@ namespace PlushContract
         int EndsetVodOnly(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getMoviesNewTitles", ReplyAction = "getMoviesNewTitles")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesNewTitles?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetMoviesNewTitles(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesNewTitles?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMoviesNewTitles(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetMoviesNewTitles(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getMoviesLastChance", ReplyAction = "getMoviesLastChance")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastChance?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastChance?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetMoviesLastChance(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getMoviesLastAdded", ReplyAction = "getMoviesLastAdded")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastAdded?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetMoviesLastAdded(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastAdded?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMoviesLastAdded(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetMoviesLastAdded(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getMostPopularMovies", ReplyAction = "getMostPopularMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMostPopularMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetMostPopularMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMostPopularMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMostPopularMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetMostPopularMovies(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getBestRatedMovies", ReplyAction = "getBestRatedMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getBestRatedMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetBestRatedMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getBestRatedMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetBestRatedMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetBestRatedMovies(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getOurFavoritesMovies", ReplyAction = "getOurFavoritesMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getOurFavoritesMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetOurFavoritesMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getOurFavoritesMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetOurFavoritesMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetOurFavoritesMovies(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true, Action = "getAllCatalogueMovies", ReplyAction = "getAllCatalogueMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getAllCatalogueMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        IAsyncResult BegingetAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, AsyncCallback callback, object asyncState);
+        [WebInvoke(Method = "GET", UriTemplate = "/getAllCatalogueMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device, AsyncCallback callback, object asyncState);
 
         List<ListMovie> EndgetAllCatalogueMovies(IAsyncResult result);
 
@@ -408,10 +408,22 @@ namespace PlushContract
 
         CataloguePage_1 EndgetCataloguePage_1(IAsyncResult result);
 
+        [OperationContract(AsyncPattern = true, Action = "getMovieFree", ReplyAction = "getMovieFree")]
+        [WebInvoke(Method = "GET", UriTemplate = "/getMovieFree?lngid={lngid}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BegingetMovieFree(int lngid, int cn, int device, AsyncCallback callback, object asyncState);
+
+        List<FreeMovie> EndgetMovieFree(IAsyncResult result);
+
         [OperationContract(AsyncPattern = true, Action = "letMeKnow", ReplyAction = "letMeKnow")]
         [WebInvoke(Method = "GET", UriTemplate = "/letMeKnow", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         IAsyncResult BeginletMeKnow( AsyncCallback callback, object asyncState);
 
         bool EndletMeKnow(IAsyncResult result);
+
+        [OperationContract(AsyncPattern = true, Action = "setTVODCustomerSubscription", ReplyAction = "setTVODCustomerSubscription")]
+        [WebInvoke(Method = "GET", UriTemplate = "/setTVODCustomerSubscription?em={em}&pswd={pswd}&device={device}&dvcnmbr={dvcnmbr}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        IAsyncResult BeginsetTVODCustomerSubscription(AsyncCallback callback, object asyncState);
+
+        int EndsetTVODCustomerSubscription(IAsyncResult result);
     }
 }

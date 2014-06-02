@@ -27,6 +27,10 @@ using PlushContract;
 using DVDPostBuziness;
 using System.Collections;
 using CountryLookupProj;
+using System.Security.Cryptography.X509Certificates;
+using System.Collections.Specialized;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
 namespace PlushService
 {
@@ -285,7 +289,7 @@ namespace PlushService
 
         }
 
-        public md getMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn)
+        public md getMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn, int device)
         {
             this._hosteventLog = new System.Diagnostics.EventLog();
             ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
@@ -313,7 +317,7 @@ namespace PlushService
 
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                IEnumerable<MovieDetailRow> mm = modelcontext.ExecuteQuery<MovieDetailRow>("CALL spMovie({0},{1},{2},{3})", imdb_id, disk_id, season_id, Utilities.GetClientCoutry()).Where(m => m.language_id == lngid);                
+                IEnumerable<MovieDetailRow> mm = modelcontext.ExecuteQuery<MovieDetailRow>("CALL spMovie({0},{1},{2},{3},{4})", imdb_id, disk_id, season_id, Utilities.GetClientCoutry(),cn).Where(m => m.language_id == lngid);                
                 IEnumerable<VODChannel> vodch = modelcontext.ExecuteQuery<VODChannel>("CALL spmovie_vod_products({0},{1},{2},{3})", imdb_id, disk_id, season_id, Utilities.GetClientCoutry());
                 IEnumerable<MovieReview> reviews = modelcontext.ExecuteQuery<MovieReview>("CALL spmovie_reviews({0},{1},{2},{3})", imdb_id, disk_id, season_id, lngid);
                 IEnumerable<DVDChannel> dvdch = modelcontext.ExecuteQuery<DVDChannel>("CALL spmovie_dvd_products({0},{1},{2},{3})", imdb_id, disk_id, season_id, lngid);   
@@ -560,7 +564,7 @@ namespace PlushService
             }
         }
 
-        public string getVodUrl(int vodid, int cn)
+        public string getVodUrl(int vodid, int cn, int device)
         {
             string ipaddress = string.Empty;
                 string ipcountry;
@@ -928,7 +932,7 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getCategoryMovies(int ctgid, int lngid, bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getCategoryMovies(int ctgid, int lngid, bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             //OperationContext context = OperationContext.Current;            
             //System.ServiceModel.Channels.MessageProperties prop = context.IncomingMessageProperties;
@@ -992,12 +996,12 @@ namespace PlushService
 
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_movie_getbycategory_tvod({0},{1},{2},{3})", ctgid, lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_movie_getbycategory_tvod({0},{1},{2},{3},{4})", ctgid, lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_movie_getbycategory_svod({0},{1},{2},{3})", ctgid, lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_movie_getbycategory_svod({0},{1},{2},{3},{4})", ctgid, lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -1324,7 +1328,7 @@ namespace PlushService
                 int vodid = int.Parse (vodidTmp [0].Split(':').ToArray()[0]);
 
                 Utilities.InsertMobileLog(cn, "getVodTokenAndLngs 3 vodid ", vodid.ToString(), device, modelcontext); 
-                string token = getVodUrl(vodid, cn);
+                string token = getVodUrl(vodid, cn,device);
                 Utilities.InsertMobileLog(cn, "getVodTokenAndLngs 4 token ", token, device, modelcontext); 
                 //
                 string AESkey = ConfigurationManager.AppSettings["AESkey"];
@@ -1771,12 +1775,13 @@ namespace PlushService
                 contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
                 //
                 string sqlMovieRateExists = QueriesDB.GetMovieRateExists(imdb_id, disk_id, season_id, cn);
+                
                 IEnumerable<numberresult> res = contextBeProd.ExecuteQuery<numberresult>(sqlMovieRateExists);
                 numberresult exists = res.FirstOrDefault<numberresult>();
                 if (exists.r == 0)
                 {
-
-                    string sqlAddMovieRate = QueriesDB.GetInsertMovieRate(imdb_id, disk_id, season_id, cn, rate);
+                    
+                    string sqlAddMovieRate = QueriesDB.GetInsertMovieRate(imdb_id, disk_id, season_id, cn, rate);                
                     //
                     return contextBeProd.ExecuteCommand(sqlAddMovieRate);
                 }
@@ -1889,7 +1894,7 @@ namespace PlushService
 
         }
 
-        public List<ListMovie> getMoviesNewTitles(int lngid, bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getMoviesNewTitles(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -1908,12 +1913,12 @@ namespace PlushService
                 //
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -1948,7 +1953,37 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<FreeMovie> getMovieFree(int lngid, int cn, int device)
+        {
+            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+            IEnumerable<FreeMovie> result = null;
+            DVdPostMobileApIWS modelcontext = null;
+            
+            try
+            {
+                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));               
+                result = modelcontext.ExecuteQuery<FreeMovie>("CALL sp_free_movie({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn);
+                
+                return result.ToList<FreeMovie>();
+            }
+            catch (Exception ex)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushServiceSource";
+                _hosteventLog.Log = "PlushServiceLog";
+                _hosteventLog.WriteEntry("getMovieFree. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMovieFree.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("getMovieFree InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return null;
+            }
+        }
+
+        public List<ListMovie> getMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -1963,12 +1998,12 @@ namespace PlushService
                 //
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_chance_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_chance_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_chance_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_chance_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -1993,17 +2028,17 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMoviesNewTitles. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMoviesNewTitles.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMoviesLastChance. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMoviesLastChance.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
-                    _hosteventLog.WriteEntry("getMoviesNewTitles InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                    _hosteventLog.WriteEntry("getMoviesLastChance InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
                 }
                 return null;
             }
         }
 
-        public List<ListMovie> getAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2016,12 +2051,12 @@ namespace PlushService
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn ).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_tvod({0},{1},{2}, {3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn ).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
               
                 if (tvod != null && svod != null)
@@ -2084,17 +2119,17 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMoviesNewTitles. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMoviesNewTitles.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMoviesSoon_1. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMoviesSoon_1.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
-                    _hosteventLog.WriteEntry("getMoviesNewTitles InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                    _hosteventLog.WriteEntry("getMoviesSoon_1 InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
                 }
                 return null;
             }
         }
 
-        public List<ListMovie> getMoviesLastAdded(int lngid,  bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getMoviesLastAdded(int lngid,  bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2112,12 +2147,12 @@ namespace PlushService
 
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_added_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_added_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_added_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_added_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -2152,7 +2187,7 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getMostPopularMovies(int lngid,  bool show_tvod,  bool show_svod, int cn,  int pageNumber, int pageSize)
+        public List<ListMovie> getMostPopularMovies(int lngid,  bool show_tvod,  bool show_svod, int cn,  int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2170,12 +2205,12 @@ namespace PlushService
 
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_most_rented_movies_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_most_rented_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_most_rented_movies_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_most_rented_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -2210,7 +2245,7 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getBestRatedMovies(int lngid, bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getBestRatedMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2228,12 +2263,12 @@ namespace PlushService
 
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_best_rated_movies_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_best_rated_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_best_rated_movies_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_best_rated_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -2258,17 +2293,17 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMostPopularMovies. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMostPopularMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getBestRatedMovies. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getBestRatedMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
-                    _hosteventLog.WriteEntry("getMostPopularMovies InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                    _hosteventLog.WriteEntry("getBestRatedMovies InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
                 }
                 return null;
             }
         }
 
-        public List<ListMovie> getOurFavoritesMovies(int lngid,  bool show_tvod,  bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getOurFavoritesMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2287,12 +2322,12 @@ namespace PlushService
 
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_our_movies_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_our_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_our_movies_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_our_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -2356,7 +2391,7 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getMoviesSoon(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize)
+        public List<ListMovie> getMoviesSoon(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device)
         {
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             List<ListMovie> lbrv = new List<ListMovie>();
@@ -2373,12 +2408,12 @@ namespace PlushService
                 //return mm.ToList<ListMovie>();
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_tvod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_svod({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (tvod != null && svod != null)
@@ -2887,7 +2922,7 @@ namespace PlushService
                     ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                     _hosteventLog.Source = "PlushServiceSource";
                     _hosteventLog.Log = "PlushServiceLog";
-                    _hosteventLog.WriteEntry("getHomePageCategoryMovies. 2 lngid, refclient, refclientid: " + lngid + ", " + refclient + ", " + refclientid);
+                    _hosteventLog.WriteEntry("getCatalogCommunityMovies. 2 lngid, refclient, refclientid: " + lngid + ", " + refclient + ", " + refclientid);
                     return null;
                 }
             }
@@ -2930,7 +2965,7 @@ namespace PlushService
                 int vodid = int.Parse(vodidTmp[0].Split(':').ToArray()[0]);
 
                 Utilities.InsertMobileLog(cn, "getVodTokenAndLngsTest 3 vodid ", vodid.ToString(), device, modelcontext);
-                string token = getVodUrl(vodid, cn);
+                string token = getVodUrl(vodid, cn, device);
                 Utilities.InsertMobileLog(cn, "getVodTokenAndLngsTest 4 token ", token, device, modelcontext);
                 //
                 string AESkey = ConfigurationManager.AppSettings["AESkey"];
@@ -3195,11 +3230,11 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMoviesSoon. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMoviesSoon.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getTodaysMovies. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getTodaysMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
-                    _hosteventLog.WriteEntry("getMoviesSoon InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                    _hosteventLog.WriteEntry("getTodaysMovies InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
                 }
                 return null;
             }
@@ -3582,6 +3617,505 @@ namespace PlushService
         public bool letMeKnow()
         {
             return (Utilities.GetClientCoutry() != "US" && Boolean.Parse(ConfigurationManager.AppSettings["ShowRegistration"]));
+        }
+
+        public int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr)
+        {
+            int newCustomersID;
+            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+            DVdPostMobileApIWS modelcontext = null;
+            CustomerDetails cd = new CustomerDetails();
+
+            try
+            {
+                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+                modelcontext.ObjectTrackingEnabled = false;
+                modelcontext.QueryCacheEnabled = true;
+                IEnumerable<CustomerDetailsRow> cdr = modelcontext.ExecuteQuery<CustomerDetailsRow>("CALL sp_customer_get({0},{1})", em, string.Empty);
+
+                if (cdr.Count() > 0)
+                    return -1;
+            }
+            catch (Exception ex2)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("setTVODCustomerSubscription.Exception: 1 em, pswd: " + em + ", " + pswd + ", error " + ex2.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex2.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("setTVODCustomerSubscription InnerException: 1 " + ex2.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return 0;
+            }
+            string[] tvodproductsarray = new string[4];
+            tvodproducts tvodproducts = new tvodproducts ();
+
+            IEnumerable<tvodproducts> resultTVODProducts;
+            try
+            {
+
+                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+                modelcontext.ObjectTrackingEnabled = false;
+                modelcontext.QueryCacheEnabled = true;
+
+                string encryptedPass = "Utilities.BCryptPassword(pswd)";
+                newCustomersID = modelcontext.ExecuteCommand("CALL sp_TVODcustomer_subscription({0},{1})", em, encryptedPass);
+
+                string strSQLTVODProducts = QueriesDB.getTVODAnyoneProducts();
+                resultTVODProducts = modelcontext.ExecuteQuery<tvodproducts>(strSQLTVODProducts);                
+
+            }
+            catch (Exception ex)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("setTVODCustomerSubscription.Exception: 2 em, pswd: " + em + ", " + pswd + ", error " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("setTVODCustomerSubscription InnerException: 2 " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return 0;
+            }
+            try
+            {
+                DVdPostMobileApIWS contextBeProd = null;
+                string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+                contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+                contextBeProd.ObjectTrackingEnabled = false;
+                contextBeProd.QueryCacheEnabled = true;
+
+
+                // send email
+                DataTable dt = new DataTable("customermail");
+                dt.Columns.Add("customers_firstname", typeof(string));
+                dt.Columns.Add("customers_lastname", typeof(string));
+                dt.Columns.Add("customers_name", typeof(string));
+                dt.Columns.Add("customers_gender", typeof(string));
+                dt.Columns.Add("products_id1", typeof(string));
+                dt.Columns.Add("products_id2", typeof(string));
+                dt.Columns.Add("products_id3", typeof(string));
+                dt.Columns.Add("products_id4", typeof(string));
+                dt.Columns.Add("products_id1_name", typeof(string));
+                dt.Columns.Add("products_id2_name", typeof(string));
+                dt.Columns.Add("products_id3_name", typeof(string));
+                dt.Columns.Add("products_id4_name", typeof(string));
+                dt.Columns.Add("products_id1_img", typeof(string));
+                dt.Columns.Add("products_id2_img", typeof(string));
+                dt.Columns.Add("products_id3_img", typeof(string));
+                dt.Columns.Add("products_id4_img", typeof(string));
+                dt.Columns.Add("email", typeof(string));
+                dt.Columns.Add("customers_language", typeof(int));
+                dt.Columns.Add("Customers_id", typeof(int));
+
+                DataRow dr = dt.NewRow();
+                dr["customers_firstname"] = string.Empty;
+                dr["customers_lastname"] = string.Empty;
+                dr["customers_name"] = string.Empty;
+                dr["customers_gender"] = string.Empty;
+                dr["products_id1"] = resultTVODProducts.ToArray()[0].products_id;
+                dr["products_id2"] = resultTVODProducts.ToArray()[1].products_id;
+                dr["products_id3"] = resultTVODProducts.ToArray()[2].products_id;
+                dr["products_id4"] = resultTVODProducts.ToArray()[3].products_id;
+                dr["products_id1_name"] = resultTVODProducts.ToArray()[0].products_name;
+                dr["products_id2_name"] = resultTVODProducts.ToArray()[1].products_name;
+                dr["products_id3_name"] = resultTVODProducts.ToArray()[2].products_name;
+                dr["products_id4_name"] = resultTVODProducts.ToArray()[3].products_name;
+                dr["products_id1_img"] = resultTVODProducts.ToArray()[0].products_image_big;
+                dr["products_id2_img"] = resultTVODProducts.ToArray()[1].products_image_big;
+                dr["products_id3_img"] = resultTVODProducts.ToArray()[2].products_image_big;
+                dr["products_id4_img"] = resultTVODProducts.ToArray()[3].products_image_big;
+                dr["email"] = em;
+                dr["customers_language"] = 1;
+                dr["Customers_id"] = newCustomersID;
+
+
+                PlushData.clsConnection.typeEnv = "prod";
+                PlushBuziness.clsMail.SendMail(dr, PlushBuziness.clsMail.Mail.MAIL_PLUSH_TVOD_TO_ANYONE_WELCOME, true, string.Empty, string.Empty, string.Empty);
+
+            }
+            catch (Exception ex3)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("setTVODCustomerSubscription.Exception: 3 em, pswd: " + em + ", " + pswd + ", error " + ex3.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex3.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("setTVODCustomerSubscription InnerException: 3 " + ex3.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return 0;
+            }
+
+            return newCustomersID;
+
+        }
+
+        public VodTokenLengs TVODPayAndGetVodTokenAndLngs(int imdb_id, int disk_id, int season_id, string amount, string card_type, string card_no, string card_ed, string card_owner, string cvc, int cn, int device)
+        {
+            bool isSVOD = true;
+            bool isFreeMovie = true;
+            VodTokenLengs returnVTL = new VodTokenLengs();
+            CustomerDetailsRow cd;
+            string connstr_mobile_api_ws = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+            string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+            DVdPostMobileApIWS contextMobileApiWs = new DVdPostMobileApIWS(new MySqlConnection(connstr_mobile_api_ws));
+            DVdPostMobileApIWS contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+
+            contextMobileApiWs.ObjectTrackingEnabled = false;
+            contextMobileApiWs.QueryCacheEnabled = true;
+
+            string sqlISSVOD = QueriesDB.getIsSVOD(imdb_id);
+            string sqlIsFreeMovie = QueriesDB.getIsFreeMovie(imdb_id);
+            IEnumerable<numberresult> svodcount = contextBeProd.ExecuteQuery<numberresult>(sqlISSVOD, null);
+            isSVOD = svodcount.First().r > 0;
+
+            IEnumerable<numberresult> freemoviecount = contextBeProd.ExecuteQuery<numberresult>(sqlIsFreeMovie, null);
+            isFreeMovie = freemoviecount.First().r > 0;
+
+            IEnumerable<CustomerDetailsRow> cdr = contextMobileApiWs.ExecuteQuery<CustomerDetailsRow>("CALL sp_customer_getbyid({0})", cn);
+
+            if (cdr.Count() > 0)
+            {
+                cd = cdr.ToList()[0];
+            }
+            else
+            {
+                returnVTL.t = "1";
+                return returnVTL;  //no customer
+            }
+            if (!isSVOD && cd.ogreg == 0 && !isFreeMovie)
+            {
+                returnVTL.t = "2"; //not ogone registerd
+                return returnVTL;
+            }
+            if ((cd.isac == 0))
+            {
+                returnVTL.t = "3"; //not active
+                return returnVTL;
+            }
+            if (cd.susp > 0)
+            {
+                returnVTL.t = "6"; //suspended
+                return returnVTL;
+            }
+            if (cd.sbst == 6 && isSVOD && !isFreeMovie)
+            {
+                returnVTL.t = "7"; //light customers can not wathc svod
+                return returnVTL;
+            }
+
+            //token already exists
+            string sqlGetToken = QueriesDB.getToken(imdb_id, cn);
+            var listToken = contextBeProd.ExecuteQuery<Utilities.Token>(sqlGetToken);
+            if (listToken.Count<Utilities.Token>() > 0)
+            {
+                IEnumerable<VODChannel> vodch = contextMobileApiWs.ExecuteQuery<VODChannel>("CALL spmovie_vod_products({0},{1},{2},{3})", imdb_id, disk_id, season_id, "BE");
+                if (vodch.Count() > 0)
+                {
+                    returnVTL.a = vodch.ToList()[0].a;
+                    returnVTL.t = listToken.ToList()[0].token;
+                    return returnVTL;
+                }
+            }
+            //
+
+            if ((cd.pmt.Equals("1")) && ((cd.ocno != null && cd.ocno != card_no) || (cd.octp != null && cd.octp != card_type) || (cd.oexp != null && cd.oexp != card_ed) || (cd.oown != null && cd.oown != card_owner)))
+            {
+                returnVTL = CreateOgoneAlias(card_type, card_owner, card_no, cvc, card_ed, cd.cn);
+                int alias_created = int.Parse(returnVTL.t);
+                if (alias_created < 0)
+                {
+                    return returnVTL;
+                }
+            }
+            else if (cd.pmt.Equals("0"))
+            {
+                returnVTL = CreateOgoneAlias(card_type, card_owner, card_no, cvc, card_ed, cd.cn);
+                int alias_created = int.Parse(returnVTL.t);
+                if (alias_created < 0)
+                {
+                    return returnVTL;
+                }
+            }
+
+            ////insert abo
+            //string sqlABO = QueriesDB.GetInsertHistoryAbo(int.Parse(cd.cn), string.Empty, 6, "OGONE", 37);
+            //IEnumerable<aliasorder> abo_idEnumerable = contextBeProd.ExecuteQuery<aliasorder>(sqlABO, null);
+            //int abo_id = abo_idEnumerable.FirstOrDefault().returned_number ;
+            ////insert payment
+            //string sqlOgonePayment = QueriesDB.CreateOgonePayment(abo_id, PlushData.ClsCustomersData.Payment_Method.OGONE, int.Parse(cd.cn), amount);
+            //IEnumerable<aliasorder> orderidEnumerable = contextBeProd.ExecuteQuery<aliasorder>(sqlOgonePayment, null);
+            //int orderid = orderidEnumerable.FirstOrDefault().returned_number;
+            //
+            returnVTL = CreateOgonePayment(amount, "p" + cd.cn, cvc, int.Parse(cd.cn));
+
+            int ogone_payment_created = int.Parse(returnVTL.t);
+            if (ogone_payment_created < 0)
+            {
+                return returnVTL;
+            }
+
+            string sqlCustomerOgone = QueriesDB.getUpdateCustomerOgone(cn, card_owner, card_no, card_ed, card_type);
+            int customerUpdated = contextBeProd.ExecuteCommand(sqlCustomerOgone, null);
+
+            return getVodTokenAndLngs(imdb_id, disk_id, season_id, cn, device);
+        }
+
+        private VodTokenLengs CreateOgoneAlias(string brand, string customerName, string cardno, string cvc, string ed, string cn)
+        {
+            DVdPostMobileApIWS contextBeProd = null;
+            VodTokenLengs returnVTL = new VodTokenLengs();
+
+            string alias = "p" + cn;
+
+            string parameters = "?";
+            string parametersToHashTmp = string.Empty;
+            string shasign = string.Empty;
+            string parameterToHash = string.Empty;
+
+            string aliasGatewayURL = ConfigurationManager.AppSettings["AliasGatewayURL"];
+            string acceptURL = ConfigurationManager.AppSettings["AcceptAliasURL"];
+            string exceptionURL = ConfigurationManager.AppSettings["ExceptionAliasURL"];
+            string passPhrase = ConfigurationManager.AppSettings["passPhrase"];
+            string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+            aliasorder order = null;
+
+            contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+
+            try
+            {
+                string sqlAliasInsert = QueriesDB.InsertOgoneAliasOrder(customerName, cardno, cvc, ed, alias, cn);
+                IEnumerable<aliasorder> aliases = contextBeProd.ExecuteQuery<aliasorder>(sqlAliasInsert, null);
+
+                order = aliases.FirstOrDefault();
+
+                if (order == null)
+                {
+                    returnVTL.t = "-2";
+                    return returnVTL;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                returnVTL.t = "-2";
+                return returnVTL;
+            }
+
+            //to hash
+            parametersToHashTmp += "ACCEPTURL=" + acceptURL;
+            parametersToHashTmp += "&ALIAS=" + alias;
+            parametersToHashTmp += "&EXCEPTIONURL=" + exceptionURL;
+            parametersToHashTmp += "&ORDERID=" + order.returned_number; 
+            parametersToHashTmp += "&PSPID=dvdpostogonetest&";
+            parameterToHash = parametersToHashTmp.Replace("&", "KILLBILL1$metropolis");
+
+            string s = GenerateHash(Encoding.UTF8.GetBytes(parameterToHash));
+            shasign = s.ToUpper();           
+
+            try
+            {
+                using (var wb = new WebClient())
+                {
+                    var data = new NameValueCollection();
+                    data["ACCEPTURL"] = acceptURL;
+                    data["ALIAS"] = "p" + cn;
+                    //data["BRAND"] = brand;
+                    data["CARDNO"] = cardno;
+                    data["CN"] = customerName;
+                    data["CVC"] = cvc;
+                    data["ED"] = ed;
+                    data["EXCEPTIONURL"] = exceptionURL;
+                    data["ORDERID"] = order.returned_number.ToString(); 
+                    data["PSPID"] = "dvdpostogonetest";
+                    data["SHASIGN"] = shasign;
+                    var response = wb.UploadValues(aliasGatewayURL, "POST", data);
+
+                    Wait();
+
+                    string sqlAliasStatus = QueriesDB.GetOgoneAliasOrderStatus(alias, order.returned_number.ToString());
+                    IEnumerable<aliasorder> aliase_status = contextBeProd.ExecuteQuery<aliasorder>(sqlAliasStatus, null);
+
+                    aliasorder order_status = aliase_status.FirstOrDefault();
+
+                    if (order_status.returned_number != 0)
+                    {
+                        returnVTL.t = "-3";
+                        return returnVTL;
+                    }
+                    returnVTL.t = order.returned_number.ToString();
+                    return returnVTL;
+                }
+            }
+            catch (Exception ex)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("CreateOgoneAlias.Exception 2: brand, customerName, cardno, cvc, ed, alias, cn, parameterToHash, shasign: " + brand + ", " + customerName + ", " + cardno + ", " + cvc + ", " + ed + ", " + ", " + alias + ", " + cn + ", " + parameterToHash + ", " + shasign + ", error " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("CreateOgoneAlias InnerException 2: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                returnVTL.t = "-3";
+                return returnVTL;
+            }
+        }
+
+        private VodTokenLengs CreateOgonePayment(string amount, string alias, string cvc, int customers_id)
+        {
+            DVdPostMobileApIWS contextBeProd = null;
+            VodTokenLengs returnVTL = new VodTokenLengs();
+            string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+            string directLinkURL = ConfigurationManager.AppSettings["OrderURL"];            
+            string shasign = string.Empty;
+            string parameterToHash = string.Empty;
+            string parametersToHashOriginal = string.Empty;
+
+            contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+
+            contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+            //insert abo
+            string sqlABO = QueriesDB.GetInsertHistoryAbo(customers_id, string.Empty, 6, "OGONE", 37);
+            IEnumerable<aliasorder> abo_idEnumerable = contextBeProd.ExecuteQuery<aliasorder>(sqlABO, null);
+            int abo_id = abo_idEnumerable.FirstOrDefault().returned_number;
+            //insert payment
+            string sqlOgonePayment = QueriesDB.CreateOgonePayment(abo_id, PlushData.ClsCustomersData.Payment_Method.OGONE, customers_id, amount);
+            IEnumerable<aliasorder> orderidEnumerable = contextBeProd.ExecuteQuery<aliasorder>(sqlOgonePayment, null);
+            int orderid = orderidEnumerable.FirstOrDefault().returned_number;
+
+
+            //parameters to hash
+
+            parametersToHashOriginal += "ALIAS=" + alias;
+            parametersToHashOriginal += "&ALIASUSAGE=pmtorder";
+            parametersToHashOriginal += "&AMOUNT=" + amount;
+            parametersToHashOriginal += "&CURRENCY=EUR";
+            parametersToHashOriginal += "&CVC=" + cvc;            
+            parametersToHashOriginal += "&OPERATION=RES";                        
+            parametersToHashOriginal += "&ORDERID=" + orderid;            
+
+            parametersToHashOriginal += "&PSPID=dvdpostogonetest&PSWD=dvdapi3&USERID=dvdposttestapi&";
+
+            parameterToHash = parametersToHashOriginal.Replace("&", "KILLBILL1$metropolis");
+
+            string s = GenerateHash(Encoding.UTF8.GetBytes(parameterToHash));
+            shasign = s.ToUpper();
+
+            //parameters
+
+            try
+            {
+                using (var wb = new WebClient())
+                {
+                    var data = new NameValueCollection();
+                    data["ALIAS"] = alias;
+                    data["ALIASUSAGE"] = "pmtorder";
+                    data["AMOUNT"] = amount;
+                    data["CURRENCY"] = "EUR";
+                    data["CVC"] = cvc;
+                    data["OPERATION"] = "RES";
+                    data["ORDERID"] = orderid.ToString() ;
+                    data["PSPID"] = "dvdpostogonetest";
+                    data["PSWD"] = "dvdapi3";
+                    data["SHASIGN"] = shasign;
+                    data["USERID"] = "dvdposttestapi";
+
+                    byte[] response = wb.UploadValues(directLinkURL, "POST", data);
+
+                    string str = System.Text.Encoding.UTF8.GetString(response);                    
+
+                    StringReader rdr = new StringReader(str);
+                    XDocument xd = XDocument.Load(rdr);
+
+                    string sqlResponseXML = QueriesDB.getInsertPaymentOgoneWS(orderid, str);
+                    int responseTMP = contextBeProd.ExecuteCommand(sqlResponseXML, null);
+
+                    if (xd.Root.Attribute("STATUS").Value.Equals("5") && xd.Root.Attribute("orderID").Value.Equals(orderid.ToString())) 
+                    {
+                        string sqlUpadatePaymentStatus = QueriesDB.getUpadatePaymentStatus(orderid);
+                        int payment_result = contextBeProd.ExecuteCommand(sqlUpadatePaymentStatus, null);
+
+                        returnVTL.t = orderid.ToString()  ;
+                        return returnVTL;
+                    }
+                    else
+                    {
+                        returnVTL.t = "-1";
+                        return returnVTL;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("CreateOgonePayment.Exception 1: brand, customerName, cardno, cvc, ed, orderid, alias, cn, parameterToHash, shasign: " + cvc + ", " + orderid + ", " + alias + ", " + ", " + parameterToHash + ", " + shasign + ", error " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("CreateOgonePayment InnerException 1: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                returnVTL.t = "-3";
+                return returnVTL;
+            }
+        
+
+        }
+
+        private ncresponse ByteArrayToObject(byte[] arrBytes)
+        {
+            MemoryStream memStream = new MemoryStream();
+            BinaryFormatter binForm = new BinaryFormatter();
+            memStream.Write(arrBytes, 0, arrBytes.Length);
+            memStream.Seek(0, SeekOrigin.Begin);
+            Object obj = (Object)binForm.Deserialize(memStream);
+            return (ncresponse)obj;
+        }
+
+        private void Wait()
+        {
+            DateTime dt = DateTime.Now.AddSeconds(2);
+            while (DateTime.Now < dt) ;
+        }
+
+        private static string GenerateHash(byte[] tohash)
+        {
+            string hashText = "";
+            string hexValue = "";
+
+            byte[] hashData = SHA1.Create().ComputeHash(tohash); // SHA1 or MD5
+
+            foreach (byte b in hashData)
+            {
+                hexValue = b.ToString("X").ToLower(); // Lowercase for compatibility on case-sensitive systems
+                hashText += (hexValue.Length == 1 ? "0" : "") + hexValue;
+            }
+
+            return hashText;
+        }
+
+        public class MyPolicy : ICertificatePolicy
+        {
+            public bool CheckValidationResult(ServicePoint srvPoint,
+              X509Certificate certificate, WebRequest request,
+              int certificateProblem)
+            {
+                //Return True to force the certificate to be accepted.
+                return true;
+            }
         }
     }
 }

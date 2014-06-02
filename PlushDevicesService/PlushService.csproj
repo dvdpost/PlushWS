@@ -78,6 +78,18 @@
     <Reference Include="MySql.Data">
       <HintPath>ReferenceDll\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="PlushBuziness">
+      <HintPath>ReferenceDll\PlushBuziness.dll</HintPath>
+    </Reference>
+    <Reference Include="PlushData">
+      <HintPath>ReferenceDll\PlushData.dll</HintPath>
+    </Reference>
+    <Reference Include="PlushLib">
+      <HintPath>ReferenceDll\PlushLib.dll</HintPath>
+    </Reference>
+    <Reference Include="PlushTools">
+      <HintPath>ReferenceDll\PlushTools.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -108,6 +120,9 @@
     <Compile Include="EncryptedString.cs" />
     <Compile Include="HostPlushService.cs" />
     <Compile Include="mobilemodel.cs" />
+    <Compile Include="OgoneAliasPaymentResponse.cs">
+      <DependentUpon>OgoneAliasPaymentResponse.xsd</DependentUpon>
+    </Compile>
     <Compile Include="PlushService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -153,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="OgoneAliasPaymentResponse.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

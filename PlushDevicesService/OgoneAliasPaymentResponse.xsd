@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ncresponse">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="orderID" type="xs:unsignedInt" use="required" />
+          <xs:attribute name="PAYID" type="xs:unsignedInt" use="required" />
+          <xs:attribute name="NCSTATUS" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="NCERROR" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="ACCEPTANCE" type="xs:string" use="required" />
+          <xs:attribute name="STATUS" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="IPCTY" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="CCCTY" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="ECI" type="xs:unsignedByte" use="required" />
+          <xs:attribute name="CVCCheck" type="xs:string" use="required" />
+          <xs:attribute name="AAVCheck" type="xs:string" use="required" />
+          <xs:attribute name="VC" type="xs:string" use="required" />
+          <xs:attribute name="AAVZIP" type="xs:string" use="required" />
+          <xs:attribute name="AAVADDRESS" type="xs:string" use="required" />
+          <xs:attribute name="AAVNAME" type="xs:string" use="required" />
+          <xs:attribute name="AAVPHONE" type="xs:string" use="required" />
+          <xs:attribute name="AAVMAIL" type="xs:string" use="required" />
+          <xs:attribute name="amount" type="xs:decimal" use="required" />
+          <xs:attribute name="currency" type="xs:string" use="required" />
+          <xs:attribute name="PM" type="xs:string" use="required" />
+          <xs:attribute name="BRAND" type="xs:string" use="required" />
+          <xs:attribute name="ALIAS" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_CITY" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_COUNTRYCODE" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_STATEDESC" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_STREET_LINE1" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_STREET_LINE2" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_POSTALCODE" type="xs:string" use="required" />
+          <xs:attribute name="CN" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_NAME_LAST" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_POSTAL_NAME_FIRST" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_BILLTO_TELECOM_PHONE_NUMBER" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_CITY" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_COUNTRYCODE" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_STATEDESC" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_STREET_LINE1" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_STREET_LINE2" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_POSTALCODE" type="xs:string" use="required" />
+          <xs:attribute name="ECOM_SHIPTO_POSTAL_NAME_LAST" type="xs:string" use="required" />
+          <xs:attribute name="NCERRORPLUS" type="xs:string" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

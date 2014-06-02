@@ -27,8 +27,8 @@ namespace PlushContract
         List<MostDiscussedMovies> getMostDiscussed(int lngid);
 
         [OperationContract(Action = "getMovieDetails", ReplyAction = "getMovieDetails")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMovieDetails?lngid={lngid}&imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        md getMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMovieDetails?lngid={lngid}&imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        md getMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn, int device);
 
         [OperationContract(Action = "getTopCategories", ReplyAction = "getTopCategories")]
         [WebInvoke(Method = "GET", UriTemplate = "/getTopCategories?lngid={lngid}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -49,8 +49,8 @@ namespace PlushContract
         CustomerDetails getCustomerDetails(string un, string pswd, int device, string dvcnmbr);
 
         [OperationContract(Action = "getVodUrl", ReplyAction = "getVodUrl")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getVodUrl?vodid={vodid}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        string getVodUrl(int vodid, int cn);
+        [WebInvoke(Method = "GET", UriTemplate = "/getVodUrl?vodid={vodid}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        string getVodUrl(int vodid, int cn,int device);
 
         //[OperationContract(Action = "getCategoriesLeft", ReplyAction = "getCategoriesLeft")]
         //[WebInvoke(Method = "GET", UriTemplate = "/getCategoriesLeft?lngid={lngid}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -61,8 +61,8 @@ namespace PlushContract
         List<ListCategory> getSubCategories(int ctgid, int lngid, bool show_tvod, bool show_svod, int cn);
 
         [OperationContract(Action = "getCategoryMovies", ReplyAction = "getCategoryMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getCategoryMovies?ctgid={ctgid}&lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getCategoryMovies(int ctgid, int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getCategoryMovies?ctgid={ctgid}&lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getCategoryMovies(int ctgid, int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         //[OperationContract(Action = "getHomePage", ReplyAction = "getHomePage")]
         //[WebInvoke(Method = "GET", UriTemplate = "/getHomePage?lngid={lngid}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -113,15 +113,15 @@ namespace PlushContract
         List<MyListMovie> getProductsAtCustomer(int cn, int lngid, int device);
 
         [OperationContract(Action = "addMovieSeen", ReplyAction = "addMovieSeen")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieSeen?imdb_id_serie={imdb_id_serie}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        int addMovieSeen(int imdb_id_serie, int disk_id, int season_id, int cn);
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieSeen?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        int addMovieSeen(int imdb_id, int disk_id, int season_id, int cn);
 
         [OperationContract(Action = "addMovieUninterested", ReplyAction = "addMovieUninterested")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieUninterested?imdb_id_serie={imdb_id_serie}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        int addMovieUninterested(int imdb_id_serie, int disk_id, int season_id, int cn);
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieUninterested?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        int addMovieUninterested(int imdb_id, int disk_id, int season_id, int cn);
 
         [OperationContract(Action = "addMovieRate", ReplyAction = "addMovieRate")]
-        [WebInvoke(Method = "GET", UriTemplate = "/addMovieRate?imdb_id_serie={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&rate={rate}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/addMovieRate?imdb_id={imdb_id}&disk_id={disk_id}&season_id={season_id}&cn={cn}&rate={rate}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         int addMovieRate(int imdb_id, int disk_id, int season_id, int cn, int rate);
 
         [OperationContract(Action = "RemoveProdFromWishlist", ReplyAction = "RemoveProdFromWishlist")]
@@ -133,32 +133,32 @@ namespace PlushContract
         int setVodOnly(int cn, int ovod);
 
         [OperationContract(Action = "getMoviesNewTitles", ReplyAction = "getMoviesNewTitles")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesNewTitles?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getMoviesNewTitles(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesNewTitles?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getMoviesNewTitles(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize,int device);
 
         [OperationContract(Action = "getMoviesLastChance", ReplyAction = "getMoviesLastChance")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastChance?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastChance?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getMoviesLastChance(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
         
         [OperationContract(Action = "getMoviesLastAdded", ReplyAction = "getMoviesLastAdded")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastAdded?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getMoviesLastAdded(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesLastAdded?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getMoviesLastAdded(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getMostPopularMovies", ReplyAction = "getMostPopularMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMostPopularMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getMostPopularMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMostPopularMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getMostPopularMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getBestRatedMovies", ReplyAction = "getBestRatedMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getBestRatedMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getBestRatedMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getBestRatedMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getBestRatedMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getOurFavoritesMovies", ReplyAction = "getOurFavoritesMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getOurFavoritesMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getOurFavoritesMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getOurFavoritesMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getOurFavoritesMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getAllCatalogueMovies", ReplyAction = "getAllCatalogueMovies")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getAllCatalogueMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getAllCatalogueMovies?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getAllCatalogueMovies(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getMoviesSoon_1", ReplyAction = "getMoviesSoon_1")]
         [WebInvoke(Method = "GET", UriTemplate = "/getMoviesSoon_1?lngid={lngid}&pageNumber={pageNumber}&pageSize={pageSize}&vodOnly={vodOnly}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -169,8 +169,8 @@ namespace PlushContract
         List<ListMovie> getMoviesBestReview(int lngid, int pageNumber, int pageSize);
 
         [OperationContract(Action = "getMoviesSoon", ReplyAction = "getMoviesSoon")]
-        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesSoon?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
-        List<ListMovie> getMoviesSoon(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize);
+        [WebInvoke(Method = "GET", UriTemplate = "/getMoviesSoon?lngid={lngid}&show_tvod={show_tvod}&show_svod={show_svod}&cn={cn}&pageNumber={pageNumber}&pageSize={pageSize}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<ListMovie> getMoviesSoon(int lngid, bool show_tvod, bool show_svod, int cn, int pageNumber, int pageSize, int device);
 
         [OperationContract(Action = "getMoviesInCinema", ReplyAction = "getMoviesInCinema")]
         [WebInvoke(Method = "GET", UriTemplate = "/getMoviesInCinema?lngid={lngid}&pageNumber={pageNumber}&pageSize={pageSize}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
@@ -278,8 +278,16 @@ namespace PlushContract
         [WebInvoke(Method = "GET", UriTemplate = "/getCataloguePage_1?lngid={lngid}&cn={cn}&device={device}&vodOnly={vodonly}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         CataloguePage_1 getCataloguePage_1(int lngid, int cn, int device, int vodOnly);
 
+        [OperationContract(Action = "getMovieFree", ReplyAction = "getMovieFree")]
+        [WebInvoke(Method = "GET", UriTemplate = "/getMovieFree?lngid={lngid}&cn={cn}&device={device}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        List<FreeMovie> getMovieFree(int lngid, int cn, int device);
+
         [OperationContract(Action = "getletMeKnow", ReplyAction = "getletMeKnow")]
         [WebInvoke(Method = "GET", UriTemplate = "/letMeKnow", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
         bool letMeKnow();
+
+        [OperationContract(Action = "setTVODCustomerSubscription", ReplyAction = "setTVODCustomerSubscription")]
+        [WebInvoke(Method = "GET", UriTemplate = "/setTVODCustomerSubscription?em={em}&pswd={pswd}&device={device}&dvcnmbr={dvcnmbr}", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr);
     }
 }

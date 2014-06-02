@@ -38,7 +38,12 @@ namespace PlushService
     public class numberresult
     {
        public int r;
-    }    
+    }
+
+    public class aliasorder
+    {
+        public int returned_number;
+    }   
 
     class Utilities
     {

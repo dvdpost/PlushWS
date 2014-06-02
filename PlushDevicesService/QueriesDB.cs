@@ -15,12 +15,12 @@ namespace PlushService
 
             return sql;
         }
-        
+
         public static string getIsSOVD(int imdb_id)
         {
             string sql = "select count(*) r from svod_dates where imdb_id = " + imdb_id + " and now() between start_on and end_on ";
 
-                return sql;
+            return sql;
         }
 
         public static string getToken(int imdb_id, int customers_id)
@@ -43,37 +43,37 @@ namespace PlushService
 
         public static string getInsertToken(int cn, string token, int imdb_id)
         {
-            string sql = string.Format("INSERT INTO tokens (token,created_at,updated_at,customer_id,code,imdb_id,count_ip, is_ppv, ppv_price) VALUES ('{0}', sysdate(), sysdate(), {1}, NULL, {2},2, 0, null) ", token,cn, imdb_id);
-            
+            string sql = string.Format("INSERT INTO tokens (token,created_at,updated_at,customer_id,code,imdb_id,count_ip, is_ppv, ppv_price) VALUES ('{0}', sysdate(), sysdate(), {1}, NULL, {2},2, 0, null) ", token, cn, imdb_id);
+
             return sql;
         }
 
         public static string getDecreaseCredit(int cn, int decrease)
         {
-            string sql = string.Format("UPDATE customers set customers_abo_dvd_credit = customers_abo_dvd_credit - " + decrease + " WHERE customers_id = {0} ",  cn);
+            string sql = string.Format("UPDATE customers set customers_abo_dvd_credit = customers_abo_dvd_credit - " + decrease + " WHERE customers_id = {0} ", cn);
 
             return sql;
         }
 
-         public static string GetLastCreditHistory(int customers_id )
-         {
+        public static string GetLastCreditHistory(int customers_id)
+        {
             string sql = "select * from credit_history where customers_id = " + customers_id + " order by id desc limit 1";
             return sql;
 
-         }
+        }
 
-        public static string GetOrdersIdCreditHistory(int customers_id , int orders_id )
+        public static string GetOrdersIdCreditHistory(int customers_id, int orders_id)
         {
             string sql = "select credit, quantity_free, quantity_paid, credit_free, credit_paid from credit_history where customers_id = " + customers_id + "  and orders_id = " + orders_id + " order by id desc limit 1 ";
             return sql;
         }
 
-        public static string GetInsertCreditHistory(int credit_free , int customers_id, int? abo_type,int credit )
+        public static string GetInsertCreditHistory(int credit_free, int customers_id, int? abo_type, int credit)
         {
             string sql;
-       
+
             sql = "insert into credit_history (customers_id , credit_action_id , user_modified,credit_paid , quantity_paid ,  quantity_free , credit_free , orders_id,abo_type )" +
-                  " values (" + customers_id + " , " + 12 + " ,  77 , 0, 0, -1, " + credit_free +", null, " + abo_type +" ) ";
+                  " values (" + customers_id + " , " + 12 + " ,  77 , 0, 0, -1, " + credit_free + ", null, " + abo_type + " ) ";
 
             return sql;
         }
@@ -89,14 +89,14 @@ namespace PlushService
         public static string GetInsertWishList(int prid, int prty, int cn, int wlsrcid)
         {
             string sql = string.Format(" insert into wishlist (customers_id, product_id, rank, priority, date_added, wishlist_type, wishlist_master_id, already_rented, theme_event_id, wishlist_source_id) " +
-                                                     " VALUES ({0}, {1}, 0, {2}, sysdate(), 'DVD_NORM', 1, 'NO', 0, {3}) ", cn, prid, prty, wlsrcid);            
+                                                     " VALUES ({0}, {1}, 0, {2}, sysdate(), 'DVD_NORM', 1, 'NO', 0, {3}) ", cn, prid, prty, wlsrcid);
 
             return sql;
         }
 
         public static string GetProductWishlistExists(int prid, int cn)
         {
-            string sql = string.Format("select count(*) as r from wishlist w where w.product_id = {0} and w.customers_id = {1}",prid,cn);
+            string sql = string.Format("select count(*) as r from wishlist w where w.product_id = {0} and w.customers_id = {1}", prid, cn);
             return sql;
         }
 
@@ -116,7 +116,7 @@ namespace PlushService
 
         public static string GetSetWishlistPriority(int pdid, int cn, int prty)
         {
-            string sql = string.Format(" update wishlist set priority = {0} where customers_id = {1}  and product_id = {2} ", prty, cn,  pdid);
+            string sql = string.Format(" update wishlist set priority = {0} where customers_id = {1}  and product_id = {2} ", prty, cn, pdid);
 
             return sql;
         }
@@ -131,7 +131,7 @@ namespace PlushService
         public static string GetInsertMovieSeen(int imdb_id_serie, int disk_id, int season_id, int cn)
         {
             string sql = string.Format(" insert into products_seen  select p.products_id, {0}, sysdate() from products p left join dvdpost_be_prod.series s on p.products_series_id = s.series_id " +
-                " where  p.imdb_id = {1} and p.products_series_number = {2} and s.parent_id = {3} ", cn, imdb_id_serie, disk_id, season_id) ;
+                " where  p.imdb_id = {1} and p.products_series_number = {2} and s.parent_id = {3} ", cn, imdb_id_serie, disk_id, season_id);
 
             return sql;
         }
@@ -146,8 +146,19 @@ namespace PlushService
 
         public static string GetInsertMovieRate(int imdb_id_serie, int disk_id, int season_id, int cn, int rate)
         {
-            string sql = string.Format(" insert into products_rating (products_id, products_rating, products_rating_date,customers_id, rating_type, imdb_id, criteo_status)  select p.products_id, {4}, sysdate(), {0}, 'IPHONE', p.imdb_id, 0 from products p left join dvdpost_be_prod.series s on p.products_series_id = s.series_id " +
+            string sql = string.Format(" insert into products_rating (products_id, products_rating, products_rating_date,customers_id, rating_type, imdb_id, criteo_status)  select p.products_id, {4}, sysdate(), {0}, 'SMARTTV', p.imdb_id, 0 from products p left join dvdpost_be_prod.series s on p.products_series_id = s.series_id " +
                 " where  p.imdb_id = {1} and p.products_series_number = {2} and ( s.parent_id = {3} or s.parent_id is null) ", cn, imdb_id_serie, disk_id, season_id, rate);
+            sql = sql + string.Format("; update products set rating_users = rating_users + {0}, rating_count = rating_count + 1 where imdb_id_serie = {1} ", rate, imdb_id_serie);
+
+            return sql;
+        }
+
+        public static string getTVODAnyoneProducts()
+        {
+            string sql = "select x.products_id, " +
+"(select products_name from `plush_production`.`products_description` pd where pd.products_id = x.products_id and language_id = 1 limit 1) as products_name, " +
+"(select products_image_big  from `plush_production`.`products_description` pd where pd.products_id = x.products_id and language_id = 1 limit 1) as products_image_big " +
+" FROM ( SELECT `products`.`products_id` FROM `plush_production`.`products`  INNER JOIN `plush_production`.`lists` ON `lists`.`product_id` = `products`.`products_id` INNER JOIN `plush_production`.`streaming_products` ON `streaming_products`.`imdb_id` = `products`.`imdb_id` AND streaming_products.available = 1 and streaming_products.country ='BE' and streaming_products.status = 'online_test_ok' and ((streaming_products.available_from <= date(now()) and streaming_products.expire_at >= date(now())) or (streaming_products.available_backcatalogue_from <= date(now()) and streaming_products.expire_backcatalogue_at >= date(now()))) WHERE (lists.en = 1) group by lists.id ORDER BY lists.id desc LIMIT 4) x";
 
             return sql;
         }
@@ -207,7 +218,7 @@ namespace PlushService
 
         public static string getSelectMaxIDCreditHistory(int cn)
         {
-            
+
             string sql = string.Format("select max(id) r from credit_history where customers_id = {0} ", cn);
 
             return sql;
@@ -223,7 +234,7 @@ namespace PlushService
         }
 
         public static string GetCreditForVod(int imdb_id_serie, int disk_id, int season_id)
-        {            
+        {
             string sql;
 
             sql = string.Format("SELECT s.credits as r FROM streaming_products s JOIN products p on s.imdb_id = p.imdb_id " +
@@ -240,5 +251,83 @@ namespace PlushService
         {
             return "select count( distinct products_id) r from products where products_type = 'dvd_norm' and products_status = 1 ";
         }
-    }
+
+        public static string InsertOgoneAliasOrder(string customerName, string cardno, string cvc, string ed, string alias, string cn)
+        {
+            return string.Format("insert into plush_staging.ogone_alias_order_ws( alias, card_owner, card_number, card_cvc, card_ed, created_at, updated_at) " +
+               " values('{0}','{1}','{2}','{3}','{4}',now(),now()); select LAST_INSERT_ID() returned_number ;", alias, cn, cardno, cvc, ed);
+
+        }
+
+        //public static string UpdateOgoneAliasOrder(string order_status, int order_id, string alias, string )
+        //{
+        //    return string.Format("insert into plush_staging.ogone_alias_order_ws( alias, card_owner, card_number, card_cvc, card_ed, created_at, updated_at) " +
+        //       " values('{0}','{1}','{2}','{3}','{4}',1,null,now(),now()); select LAST_INSERT_ID() order_id ;", alias, cn, cardno, cvc, ed);
+
+        //}
+
+        public static string GetOgoneAliasOrderStatus(string alias, string orderid)
+        {
+            return string.Format("select alias_status returned_number from plush_staging.ogone_alias_order_ws where alias = '{0}' and order_id = {1} ", alias, orderid);
+
+        }
+
+        public static string CreateOgonePayment(int abo_id, PlushData.ClsCustomersData.Payment_Method method, int customers_id, string price)
+        {
+            string sql;
+            sql = "insert into plush_staging.payment ";
+            sql += " (id ,date_added, payment_method, abo_id , customers_id , amount , payment_status , batch_id ,user_modified , last_modified) ";
+            sql += " values (null,now(),'" + method + "'," + abo_id + "," + customers_id + "," + price + ", 1, null,77 " + ",now()); select LAST_INSERT_ID() returned_number ;";
+
+            return sql;
+        }
+
+        public static string getUpadatePaymentStatus(int orderid)
+        {
+            string sql;
+            sql = "update plush_staging.payment set payment_status = 2, last_modified = now() where id = " + orderid;
+
+            return sql;
+        }
+
+        public static string getIsSVOD(int imdb_id)
+        {
+            string sql = "select count(*) r from svod_dates where imdb_id = " + imdb_id + " and now() between start_on and end_on ";
+
+            return sql;
+        }
+
+        public static string getIsFreeMovie(int imdb_id)
+        {
+            string sql = "select count(*) r from svod_dates where imdb_id = " + imdb_id + " and now() between start_on and end_on and kind = 'PREPAID_ALL' and now() between prepaid_start_on and prepaid_end_on ";
+
+            return sql;
+        }
+
+        public static string GetInsertHistoryAbo(int customers_id, string code_id, int product_id, string type_payment, int actionCode)
+        {
+            string sql;
+            if (code_id == "")
+                code_id = "null";
+
+            sql = "insert into plush_staging.abo(Customerid ,code_id, Action , Date , product_id, payment_method, comment) " +
+                    " values(" + customers_id + "," + code_id + "," + actionCode + ", now(), '" + product_id + "', '" + type_payment + "','' ); select LAST_INSERT_ID() returned_number ;";
+
+            return sql;
+        }
+
+        public static string getUpdateCustomerOgone(int cn, string customerName, string cardno, string ed, string card_type)
+        {
+            string sql = string.Format("update customers set customers_abo_payment_method = 1, ogone_card_type = '{0}',  ogone_card_no = '{1}', ogone_exp_date = '{2}', ogone_owner = '{3}' " +
+                            " where customers_id = {4}", card_type, cardno, ed,customerName, cn);
+
+            return sql;
+        }
+
+        public static string getInsertPaymentOgoneWS(int order_id, string responseXML)
+        {
+            return "insert into plush_staging.payment_ogone_ws( order_id, response_xml) values(" + order_id + ",'" + responseXML + "')";
+        }
+
+    }    
 }

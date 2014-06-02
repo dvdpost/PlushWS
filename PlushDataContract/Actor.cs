@@ -39,6 +39,19 @@ namespace PlushContract
     }
 
     [DataContract]
+    public class tvodproducts
+    {
+        [DataMember]
+        public int products_id { get; set; }
+
+        [DataMember]
+        public string products_name { get; set; }
+
+        [DataMember]
+        public string products_image_big { get; set; }
+    }
+
+    [DataContract]
     public class ListDirector
     {
         [DataMember]
