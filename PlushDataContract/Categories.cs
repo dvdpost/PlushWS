@@ -21,6 +21,9 @@ namespace PlushContract
 
         [DataMember]
         public hptrailer trailer { get; set; }
+
+        [DataMember]
+        public List<hptrailer> pstrailers { get; set; }
     }
 
     [DataContract]

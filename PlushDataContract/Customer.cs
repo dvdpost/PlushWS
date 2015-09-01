@@ -20,6 +20,163 @@ namespace PlushContract
     }
 
     [DataContract]
+    public class CustomerDetailsExtended
+    {
+        [DataMember]
+        public CustomerDetailsRowExtended cdr { get; set; } // Customer detail row bject
+
+        [DataMember]
+        public int? err { get; set; } // error ID (1-no customer with such un, 2 - wrong pass, 3 -system error, 4,5,6, n - to be defined)
+
+    }
+
+    [DataContract]
+    public class CustomerDetailsRowExtended
+    {
+        [DataMember]
+        public string cn { get; set; } //Customer number( customers_id)
+
+        [DataMember]
+        public string un { get; set; } // user name is customer's email
+
+        [DataMember]
+        public string pswd { get; set; } //password
+
+        [DataMember]
+        public string frst { get; set; } // firstname
+
+        [DataMember]
+        public string lstn { get; set; } // lastname
+
+        [DataMember]
+        public string gndr { get; set; } //gender (m-man, f -female
+
+        [DataMember]
+        public string em { get; set; } // email
+
+        //[DataMember]
+        //public string emcp { get; set; } // copy by email
+
+        [DataMember]
+        public string phnm { get; set; } //phone number
+
+        //[DataMember]
+        //public string fax { get; set; } //fax number
+
+        [DataMember]
+        public string bd { get; set; } //birth date
+
+        //[DataMember]
+        //public byte[] avtr { get; set; } // customer's img
+
+        [DataMember]
+        public string stnm { get; set; } //street with number
+
+        [DataMember]
+        public string zipc { get; set; } //postal code
+
+        [DataMember]
+        public string city { get; set; }
+
+        [DataMember]
+        public string rvst { get; set; } // my reviewer status
+
+        [DataMember]
+        public string myid { get; set; } // nickname
+
+        //[DataMember]
+        //public int? myrp { get; set; } // points, my referal points
+
+        [DataMember]
+        public int? revw { get; set; } // number of cust reviews
+
+        //[DataMember]
+        //public int? nadl { get; set; } //newsletter adult
+
+        [DataMember]
+        public int? ndvd { get; set; } //newsletters from dvdpost
+
+        [DataMember]
+        public int nprt { get; set; } //partners newsletter
+
+        [DataMember]
+        public int isac { get; set; } // is customer active
+
+        [DataMember]
+        public int? sbst { get; set; } // subscription type id
+
+        [DataMember]
+        public int? sbnt { get; set; } // next subscription type id
+
+        [DataMember]
+        public int susp { get; set; } // suspended
+
+        [DataMember]
+        public string sbsn { get; set; } // name of subscription package 
+
+        [DataMember]
+        public string vald { get; set; } //subscription valid to
+
+        [DataMember]
+        public string pmt { get; set; } // payment type id ( needed codelist of payments' type)
+
+        [DataMember]
+        public int ogreg { get; set; } //ogone registered
+
+        [DataMember]
+        public string octp { get; set; } // ogone card type
+
+        [DataMember]
+        public string ocno { get; set; } // ogone card type
+
+        [DataMember]
+        public string oexp { get; set; } // ogone card expire
+
+        [DataMember]
+        public string oown { get; set; } // ogone card owner
+
+        [DataMember]
+        public int? dsid { get; set; } // discount code id 
+
+        [DataMember]
+        public string dstp { get; set; } // discount code type
+
+        [DataMember]
+        public int? lng { get; set; } // customers default language
+
+        [DataMember]
+        public string accr { get; set; } // customer account created
+
+        [DataMember]
+        public string acmd { get; set; } // customer account modified
+
+        [DataMember]
+        public int? tvod_free { get; set; } // only vod
+    }
+
+    [DataContract]
+    public class CustomersCCData
+    {
+        [DataMember]
+        public int pmt { get; set; } //ogone registered
+
+        [DataMember]
+        public int ogreg { get; set; } //ogone registered
+
+        [DataMember]
+        public string octp { get; set; } // ogone card type
+
+        [DataMember]
+        public string ocno { get; set; } // ogone card number
+
+        [DataMember]
+        public string oexp { get; set; } // ogone card expire
+
+        [DataMember]
+        public string oown { get; set; } // ogone card owner
+    }
+
+    [DataContract]
     public class CustomerDetailsRow
     {
         [DataMember]

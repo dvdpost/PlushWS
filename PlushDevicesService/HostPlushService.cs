@@ -83,50 +83,50 @@ namespace PlushService
 
        // }
 
-        public List<BestReviewer> getBestReviewers(int lngid)
-        {
-            OperationContext context = OperationContext.Current;
-            MessageProperties prop = context.IncomingMessageProperties;
-            RemoteEndpointMessageProperty endpoint =
-            prop[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            string ip = endpoint.Address;
+        //public List<BestReviewer> getBestReviewers(int lngid)
+        //{
+        //    OperationContext context = OperationContext.Current;
+        //    MessageProperties prop = context.IncomingMessageProperties;
+        //    RemoteEndpointMessageProperty endpoint =
+        //    prop[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+        //    string ip = endpoint.Address;
 
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            List<BestReviewer> lbrv = new List<BestReviewer>();
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    List<BestReviewer> lbrv = new List<BestReviewer>();
 
 
-            try
-            {
-                DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //    try
+        //    {
+        //        DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                var lstMovies = from vmovie in modelcontext.BestReviewers
-                                select vmovie;
+        //        var lstMovies = from vmovie in modelcontext.BestReviewers
+        //                        select vmovie;
 
-                foreach (BestReviewers bestReviewer in lstMovies)
-                {
-                    BestReviewer  brv = new BestReviewer();
-                    brv.a = 2;
-                    brv.customer_id = bestReviewer.CustomersID ;
-                    brv.firstname = bestReviewer.CustomersFirstName  ;
+        //        foreach (BestReviewers bestReviewer in lstMovies)
+        //        {
+        //            BestReviewer  brv = new BestReviewer();
+        //            brv.a = 2;
+        //            brv.customer_id = bestReviewer.CustomersID ;
+        //            brv.firstname = bestReviewer.CustomersFirstName  ;
 
-                    brv.image = Convert.ToBase64String(bestReviewer.Avatar);
-                    brv.lastname = bestReviewer.CustomersLastName ;
-                    brv.nickname = bestReviewer.Nickname; 
-                    brv.rank = bestReviewer.Rank ;
-                    brv.ratings_count = bestReviewer.RatingsCount ;
-                    brv.reviews_count = bestReviewer.ReviewsCount; 
-                    brv.position = bestReviewer.Position;
+        //            brv.image = Convert.ToBase64String(bestReviewer.Avatar);
+        //            brv.lastname = bestReviewer.CustomersLastName ;
+        //            brv.nickname = bestReviewer.Nickname; 
+        //            brv.rank = bestReviewer.Rank ;
+        //            brv.ratings_count = bestReviewer.RatingsCount ;
+        //            brv.reviews_count = bestReviewer.ReviewsCount; 
+        //            brv.position = bestReviewer.Position;
 
-                    lbrv.Add(brv);
-                }
-            }
-            catch (Exception ex)
-            {
-                _hosteventLog.WriteEntry("getBestReviewer.Exception: " + ex.Message + "InnerException: " + ex.InnerException.Message);
-            }
-            return lbrv;
+        //            lbrv.Add(brv);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _hosteventLog.WriteEntry("getBestReviewer.Exception: " + ex.Message + "InnerException: " + ex.InnerException.Message);
+        //    }
+        //    return lbrv;
 
-        }
+        //}
 
         public List<TopCategory> getTopCategories(int lngid)
         {
@@ -190,104 +190,104 @@ namespace PlushService
             }
         }
 
-        public List<ListMovie> getListMovies(string search, int publicDown, int publicUp, 
-                                                    string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,  
-                                                    int ourfavorite, string audios, string titles , int lngid, int pageNumber, int pageSize)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            List<ListMovie> lbrv = new List<ListMovie>();
-            DVdPostMobileApIWS modelcontext = null;
-            string sss = string.Empty;
-            try
-            {
-                search = search.Replace(' ', '%');
-                search = search.Replace('\'', '%');
-                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
-                modelcontext.ObjectTrackingEnabled = false;
-                modelcontext.QueryCacheEnabled = true;
+        //public List<ListMovie> getListMovies(string search, int publicDown, int publicUp, 
+        //                                            string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,  
+        //                                            int ourfavorite, string audios, string titles , int lngid, int pageNumber, int pageSize)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    List<ListMovie> lbrv = new List<ListMovie>();
+        //    DVdPostMobileApIWS modelcontext = null;
+        //    string sss = string.Empty;
+        //    try
+        //    {
+        //        search = search.Replace(' ', '%');
+        //        search = search.Replace('\'', '%');
+        //        modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //        modelcontext.ObjectTrackingEnabled = false;
+        //        modelcontext.QueryCacheEnabled = true;
 
-                Utilities.InsertMobileLog(-1, "getListMovies", search, -1, modelcontext); 
+        //        Utilities.InsertMobileLog(-1, "getListMovies", search, -1, modelcontext); 
 
-                sss = string.Format("CALL sp_search_movie('{0}',{1},{2},'{3}',{4},{5},{6},{7},{8},{9},'{10}','{11}',{12},'{13}')",
-                                                                                search, publicDown, publicUp, technologys , countryID, yearDown, yearUp, ratingDown, ratingUp,
-                                                                                ourfavorite, audios ,  titles , lngid, Utilities.GetClientCoutry()  );
-                IEnumerable<ListMovie> mm = modelcontext.ExecuteQuery<ListMovie>(sss).Skip((pageNumber - 1) * pageSize).Take(pageSize);
-                return mm.ToList<ListMovie>();
+        //        sss = string.Format("CALL sp_search_movie('{0}',{1},{2},'{3}',{4},{5},{6},{7},{8},{9},'{10}','{11}',{12},'{13}')",
+        //                                                                        search, publicDown, publicUp, technologys , countryID, yearDown, yearUp, ratingDown, ratingUp,
+        //                                                                        ourfavorite, audios ,  titles , lngid, Utilities.GetClientCoutry()  );
+        //        IEnumerable<ListMovie> mm = modelcontext.ExecuteQuery<ListMovie>(sss).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+        //        return mm.ToList<ListMovie>();
 
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getListMovies call sp::   " + sss, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getListMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getListMovies InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }
-            finally
-            {
-                modelcontext.Connection.Close();
-                modelcontext.Connection.Dispose();
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getListMovies call sp::   " + sss, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getListMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getListMovies InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        modelcontext.Connection.Close();
+        //        modelcontext.Connection.Dispose();
+        //    }
+        //}
 
-        public List<BestReview> getBestReviews(int lngid)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            List<BestReview> lbrv = new List<BestReview>();
+        //public List<BestReview> getBestReviews(int lngid)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    List<BestReview> lbrv = new List<BestReview>();
 
-            try
-            {
-                DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //    try
+        //    {
+        //        DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                var lstMovies = from vmovie in modelcontext.BestReviews
-                                where vmovie.LanguagesID== lngid
-                                select vmovie;
+        //        var lstMovies = from vmovie in modelcontext.BestReviews
+        //                        where vmovie.LanguagesID== lngid
+        //                        select vmovie;
 
-                foreach (BestReviews bestReview in lstMovies)
-                {
-                    BestReview brv = new BestReview();
-                    brv.a = 3;
-                    brv.badrating = bestReview.CustomersBadRating;
-                    brv.bestrating = bestReview.CustomersBestRating;
-                    brv.customernickname = bestReview.CustomersName;
-                    brv.disk_id = bestReview.DiskID;
-                    brv.dvdrating = bestReview.DVdPostRating;
-                    brv.imdb_id = bestReview.IMDbID;
-                    brv.rank = bestReview.Rank;
-                    brv.languageid = bestReview.LanguagesID;
-                    brv.movie_image = bestReview.MovieImage;
-                    brv.movie_name = bestReview.MovieName;
-                    brv.reviewsrating = bestReview.ReviewsRating;
-                    brv.reviewstext = bestReview.ReviewsText;
-                    brv.season_id = bestReview.SeasonID; 
+        //        foreach (BestReviews bestReview in lstMovies)
+        //        {
+        //            BestReview brv = new BestReview();
+        //            brv.a = 3;
+        //            brv.badrating = bestReview.CustomersBadRating;
+        //            brv.bestrating = bestReview.CustomersBestRating;
+        //            brv.customernickname = bestReview.CustomersName;
+        //            brv.disk_id = bestReview.DiskID;
+        //            brv.dvdrating = bestReview.DVdPostRating;
+        //            brv.imdb_id = bestReview.IMDbID;
+        //            brv.rank = bestReview.Rank;
+        //            brv.languageid = bestReview.LanguagesID;
+        //            brv.movie_image = bestReview.MovieImage;
+        //            brv.movie_name = bestReview.MovieName;
+        //            brv.reviewsrating = bestReview.ReviewsRating;
+        //            brv.reviewstext = bestReview.ReviewsText;
+        //            brv.season_id = bestReview.SeasonID; 
 
-                    lbrv.Add(brv);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getBestReviewer.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getBestReviews InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                throw ex;
-            }
-            return lbrv;
+        //            lbrv.Add(brv);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getBestReviewer.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getBestReviews InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        throw ex;
+        //    }
+        //    return lbrv;
 
-        }
+        //}
 
         public md getMovieDetails(int lngid, int imdb_id, int disk_id, int season_id, int cn, int device)
         {
@@ -301,7 +301,7 @@ namespace PlushService
             string connstrRecommendations = ConfigurationManager.ConnectionStrings["recommendationsDB"].ConnectionString;
             string nbrRecommanded = ConfigurationManager.AppSettings["NmbrRecommanded"];
 
-            bool useDVDPostRecommendations = false;
+            //bool useDVDPostRecommendations = false;
             string spParameter = string.Empty;
 
             md md = new md();
@@ -313,7 +313,7 @@ namespace PlushService
             string request = "";
             try
             {
-                bool tmp = bool.TryParse(ConfigurationManager.AppSettings["UseDVDPostRecommendations"], out useDVDPostRecommendations);
+                //bool tmp = bool.TryParse(ConfigurationManager.AppSettings["UseDVDPostRecommendations"], out useDVDPostRecommendations);
 
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
@@ -339,6 +339,8 @@ namespace PlushService
                 md.season_id = mdr.season_id;
                 md.trailer_token = mdr.trailer_token;
                 md.price = mdr.price;
+
+                Utilities.InsertMobileLog(cn, "getMovieDetails lngid, imdb_id, disk, season, cn, , price", lngid.ToString() + ", imdb = " + imdb_id + ",  disk =  " + disk_id + ", " + season_id + ", cn = " + cn + ", price = " + md.price, device, modelcontext); 
 
                 if (mdr.mactors != null)
                 {
@@ -458,53 +460,53 @@ namespace PlushService
             return md;
         }
 
-        public List<MostDiscussedMovies> getMostDiscussed(int lngid)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            List<MostDiscussedMovies> lbrv = new List<MostDiscussedMovies>();
+        //public List<MostDiscussedMovies> getMostDiscussed(int lngid)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    List<MostDiscussedMovies> lbrv = new List<MostDiscussedMovies>();
 
-            try
-            {
-                DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));                
-                var lstMovies = from vmovie in modelcontext.MostDiscusEdMovies
-                                where vmovie.LanguageID == lngid
-                                select vmovie;
+        //    try
+        //    {
+        //        DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));                
+        //        var lstMovies = from vmovie in modelcontext.MostDiscusEdMovies
+        //                        where vmovie.LanguageID == lngid
+        //                        select vmovie;
 
-                foreach (MostDiscusEdMovies mostDiscuss in lstMovies)
-                {
-                    MostDiscussedMovies md = new MostDiscussedMovies();
-                    md.a = 4;
-                    md.average = mostDiscuss.Average;
-                    md.count = mostDiscuss.Count;
-                    md.disk_id = mostDiscuss.DiskID;
-                    md.imdb_id = mostDiscuss.IMDbID;
-                    md.minder = mostDiscuss.MindER;
-                    md.movie_image = mostDiscuss.MovieImage;
-                    md.movie_name = mostDiscuss.MovieName;
-                    md.plus = mostDiscuss.Plus;
-                    md.rank = mostDiscuss.Rank;
-                    md.season_id = mostDiscuss.SeasonID;                     
+        //        foreach (MostDiscusEdMovies mostDiscuss in lstMovies)
+        //        {
+        //            MostDiscussedMovies md = new MostDiscussedMovies();
+        //            md.a = 4;
+        //            md.average = mostDiscuss.Average;
+        //            md.count = mostDiscuss.Count;
+        //            md.disk_id = mostDiscuss.DiskID;
+        //            md.imdb_id = mostDiscuss.IMDbID;
+        //            md.minder = mostDiscuss.MindER;
+        //            md.movie_image = mostDiscuss.MovieImage;
+        //            md.movie_name = mostDiscuss.MovieName;
+        //            md.plus = mostDiscuss.Plus;
+        //            md.rank = mostDiscuss.Rank;
+        //            md.season_id = mostDiscuss.SeasonID;                     
 
-                    lbrv.Add(md);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMostDiscussed.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getMostDiscussed InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                throw ex;
-            }
-            return lbrv;
+        //            lbrv.Add(md);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getMostDiscussed.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getMostDiscussed InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        throw ex;
+        //    }
+        //    return lbrv;
 
-        }
+        //}
 
         public CustomerDetails getCustomerDetails(string un, string pswd, int device, string dvcnmbr)
         {
@@ -994,6 +996,8 @@ namespace PlushService
                 modelcontext.ObjectTrackingEnabled = false;
                 modelcontext.QueryCacheEnabled = true;
 
+                Utilities.InsertMobileLog(cn, "getCategoryMovies", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
+
                 if (show_tvod)
                 {
                     tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_movie_getbycategory_tvod({0},{1},{2},{3},{4})", ctgid, lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
@@ -1409,69 +1413,69 @@ namespace PlushService
         //    }
         //}
 
-        public List<ListMovie> getCustRecommendations(int cn, int lngid)
-        {
-            List<ListMovie> lm = new List<ListMovie>();
-            DVdPostMobileApIWS modelcontext = null;
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            string nbrRecommanded = ConfigurationManager.AppSettings["NmbrRecommanded"];
-            string WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSFRUSER"];
-            string request = string.Empty;
-            try
-            {
-                if (lngid == 2)
-                    WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSNLUSER"];
-                else if(lngid == 3 )
-                    WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSENUSER"];
+        //public List<ListMovie> getCustRecommendations(int cn, int lngid)
+        //{
+        //    List<ListMovie> lm = new List<ListMovie>();
+        //    DVdPostMobileApIWS modelcontext = null;
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    string nbrRecommanded = ConfigurationManager.AppSettings["NmbrRecommanded"];
+        //    string WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSFRUSER"];
+        //    string request = string.Empty;
+        //    try
+        //    {
+        //        if (lngid == 2)
+        //            WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSNLUSER"];
+        //        else if(lngid == 3 )
+        //            WEBSERVICERECOMMENDATIONS = ConfigurationManager.AppSettings["WEBSERVICERECOMMENDATIONSENUSER"];
 
-                request = string.Format(WEBSERVICERECOMMENDATIONS, cn,nbrRecommanded);
-                string responseContent;
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(request);
-                HttpWebResponse webResponse = null;
+        //        request = string.Format(WEBSERVICERECOMMENDATIONS, cn,nbrRecommanded);
+        //        string responseContent;
+        //        HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(request);
+        //        HttpWebResponse webResponse = null;
 
-                webResponse = (HttpWebResponse)webRequest.GetResponse();
-                Stream responseStream = webResponse.GetResponseStream();
-                StreamReader responseStreamReader = new StreamReader(responseStream);
-                responseContent = responseStreamReader.ReadToEnd();
-                responseStreamReader.Close();
-                XmlDocument xd = new XmlDocument();
-                XDocument xs = XDocument.Parse(responseContent);
+        //        webResponse = (HttpWebResponse)webRequest.GetResponse();
+        //        Stream responseStream = webResponse.GetResponseStream();
+        //        StreamReader responseStreamReader = new StreamReader(responseStream);
+        //        responseContent = responseStreamReader.ReadToEnd();
+        //        responseStreamReader.Close();
+        //        XmlDocument xd = new XmlDocument();
+        //        XDocument xs = XDocument.Parse(responseContent);
 
-                xd.LoadXml(responseContent);
-                //XmlNodeList ln = xd.GetElementsByTagName("DVDs");
-                XmlNodeList ln = xd.GetElementsByTagName("Item");
-                string spParameter = string.Empty;
-                foreach (XmlNode xn in ln)
-                {
-                    spParameter += xn.Attributes["id"].Value + ",";
-                }
-                if (spParameter != string.Empty)
-                {
-                    modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
-                    IEnumerable<ListMovie> recomandList = modelcontext.ExecuteQuery<ListMovie>("CALL sp_recomanded_movies({0},{1},{2})", spParameter.TrimEnd(','), lngid, Utilities.GetClientCoutry());
+        //        xd.LoadXml(responseContent);
+        //        //XmlNodeList ln = xd.GetElementsByTagName("DVDs");
+        //        XmlNodeList ln = xd.GetElementsByTagName("Item");
+        //        string spParameter = string.Empty;
+        //        foreach (XmlNode xn in ln)
+        //        {
+        //            spParameter += xn.Attributes["id"].Value + ",";
+        //        }
+        //        if (spParameter != string.Empty)
+        //        {
+        //            modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //            IEnumerable<ListMovie> recomandList = modelcontext.ExecuteQuery<ListMovie>("CALL sp_recomanded_movies({0},{1},{2})", spParameter.TrimEnd(','), lngid, Utilities.GetClientCoutry());
 
-                    lm = recomandList.ToList<ListMovie>();
-                }
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getCustRecommendations. 1 cn, lngid, request :   " + cn + ", " + lngid + ", " + request, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getCustRecommendations.Exception: 1 " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getCustRecommendations InnerException: 3" + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }    
+        //            lm = recomandList.ToList<ListMovie>();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getCustRecommendations. 1 cn, lngid, request :   " + cn + ", " + lngid + ", " + request, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getCustRecommendations.Exception: 1 " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getCustRecommendations InnerException: 3" + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }    
 
 
-            return lm;
-        }
+        //    return lm;
+        //}
 
         public List<ListMovie> getVodCatalogue(int lngid, int pageNumber, int pageSize)
         {
@@ -1505,81 +1509,81 @@ namespace PlushService
             }
         }
 
-        public List<MyListMovie> getCustProdWishList(int lngid, int cn, int device)
-        {
-            List<MyListMovie> lm = new List<MyListMovie>();
-            DVdPostMobileApIWS modelcontext = null;
-            try
-            {
-                string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //public List<MyListMovie> getCustProdWishList(int lngid, int cn, int device)
+        //{
+        //    List<MyListMovie> lm = new List<MyListMovie>();
+        //    DVdPostMobileApIWS modelcontext = null;
+        //    try
+        //    {
+        //        string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
 
-                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //        modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                IEnumerable<MyListMovie> recomandList = modelcontext.ExecuteQuery<MyListMovie>("CALL sp_customer_wishlist({0},{1}, {2})", lngid, cn, Utilities.GetClientCoutry());
+        //        IEnumerable<MyListMovie> recomandList = modelcontext.ExecuteQuery<MyListMovie>("CALL sp_customer_wishlist({0},{1}, {2})", lngid, cn, Utilities.GetClientCoutry());
 
-                lm =  recomandList.ToList<MyListMovie>();
-                return lm;
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getCustProdWishList. lngid,cn :   " + lngid + ", " + cn, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getCustProdWishList.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getCustProdWishList InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }
-        }
+        //        lm =  recomandList.ToList<MyListMovie>();
+        //        return lm;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getCustProdWishList. lngid,cn :   " + lngid + ", " + cn, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getCustProdWishList.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getCustProdWishList InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }
+        //}
 
-        public int addProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device)
-        {
-            Utilities.InsertMobileLog(cn, "addProductToWishList", pdid.ToString() + ", " + prty.ToString() + ", " + wlsrcid.ToString(), device);  
+        //public int addProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device)
+        //{
+        //    Utilities.InsertMobileLog(cn, "addProductToWishList", pdid.ToString() + ", " + prty.ToString() + ", " + wlsrcid.ToString(), device);  
 
-            List<ListMovie> lm = new List<ListMovie>();
-            DVdPostMobileApIWS contextBeProd = null;
-            try
-            {
-                string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+        //    List<ListMovie> lm = new List<ListMovie>();
+        //    DVdPostMobileApIWS contextBeProd = null;
+        //    try
+        //    {
+        //        string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
 
-                contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
-                //
-                string sqlWishlistExists = QueriesDB.GetProductWishlistExists(pdid, cn);
-                IEnumerable<numberresult> res = contextBeProd.ExecuteQuery<numberresult>(sqlWishlistExists);
-                numberresult exists = res.FirstOrDefault<numberresult>();
-                if (exists.r == 0)
-                {
+        //        contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+        //        //
+        //        string sqlWishlistExists = QueriesDB.GetProductWishlistExists(pdid, cn);
+        //        IEnumerable<numberresult> res = contextBeProd.ExecuteQuery<numberresult>(sqlWishlistExists);
+        //        numberresult exists = res.FirstOrDefault<numberresult>();
+        //        if (exists.r == 0)
+        //        {
 
-                string sqlInsertWishList = QueriesDB.GetInsertWishList(pdid, prty, cn, wlsrcid);
-                //
-                contextBeProd.ExecuteCommand(sqlInsertWishList);
-                }
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("addProductToWishList. cn, pdid:   " + cn + ", " + pdid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("addProductToWishList.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("addProductToWishList InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                if (ex.Message.Contains ("Duplicate entry"))
-                    return 2;
-                else
-                    return 0;
-            }
-        }
+        //        string sqlInsertWishList = QueriesDB.GetInsertWishList(pdid, prty, cn, wlsrcid);
+        //        //
+        //        contextBeProd.ExecuteCommand(sqlInsertWishList);
+        //        }
+        //        return 1;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("addProductToWishList. cn, pdid:   " + cn + ", " + pdid, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("addProductToWishList.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("addProductToWishList InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        if (ex.Message.Contains ("Duplicate entry"))
+        //            return 2;
+        //        else
+        //            return 0;
+        //    }
+        //}
 
         public int addVodToWishList(int imdb_id, int disk_id, int season_id, int cn, int device)
         {            
@@ -1593,6 +1597,8 @@ namespace PlushService
 
                 string sqlAddVodToWishlist = QueriesDB.getVodToWishList (imdb_id, disk_id,season_id, cn);
 
+                Utilities.InsertMobileLog(cn, "addVodToWishList", imdb_id.ToString() + ", season_id = " + season_id.ToString() + ",  disk_id =  " + disk_id.ToString(), device); 
+                  
                 IEnumerable<numberresult> res = contextBeProd.ExecuteQuery<numberresult>(sqlVodWishlistExists);
                 numberresult exists = res.FirstOrDefault<numberresult>();
                 if (exists.r == 0)
@@ -1618,94 +1624,94 @@ namespace PlushService
             }
         }
 
-        public List<DVDChannel> getMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //public List<DVDChannel> getMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-            try
-            {
-                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
-                IEnumerable<DVDChannel> dvdch = modelcontext.ExecuteQuery<DVDChannel>("CALL spmovie_dvd_products({0},{1},{2})", imdb_id_serie, disk_id, season_id);
-                return dvdch.ToList<DVDChannel>();
+        //    try
+        //    {
+        //        modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //        IEnumerable<DVDChannel> dvdch = modelcontext.ExecuteQuery<DVDChannel>("CALL spmovie_dvd_products({0},{1},{2})", imdb_id_serie, disk_id, season_id);
+        //        return dvdch.ToList<DVDChannel>();
 
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMovieDVDBlueRay. imdb_id_serie, disk_id, season_id :   " + imdb_id_serie + ", " + disk_id + ", " + season_id, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMovieDVDBlueRay.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getMovieDVDBlueRay InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getMovieDVDBlueRay. imdb_id_serie, disk_id, season_id :   " + imdb_id_serie + ", " + disk_id + ", " + season_id, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getMovieDVDBlueRay.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getMovieDVDBlueRay InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }
+        //}
 
-        public List<DVDChannel> getMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //public List<DVDChannel> getMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-            try
-            {
-                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
-                IEnumerable<DVDChannel> dvdch = modelcontext.ExecuteQuery<DVDChannel>("CALL spmovie_dvd_products_1({0},{1},{2},{3})", imdb_id_serie, disk_id, season_id, lngid);
-                return dvdch.ToList<DVDChannel>();
+        //    try
+        //    {
+        //        modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //        IEnumerable<DVDChannel> dvdch = modelcontext.ExecuteQuery<DVDChannel>("CALL spmovie_dvd_products_1({0},{1},{2},{3})", imdb_id_serie, disk_id, season_id, lngid);
+        //        return dvdch.ToList<DVDChannel>();
 
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMovieDVDBlueRay_1. imdb_id_serie, disk_id, season_id :   " + imdb_id_serie + ", " + disk_id + ", " + season_id, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getMovieDVDBlueRay_1.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getMovieDVDBlueRay_1 InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getMovieDVDBlueRay_1. imdb_id_serie, disk_id, season_id :   " + imdb_id_serie + ", " + disk_id + ", " + season_id, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getMovieDVDBlueRay_1.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getMovieDVDBlueRay_1 InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }
+        //}
 
-        public List<MyListMovie> getProductsAtCustomer(int cn, int lngid, int device)
-        {
-            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
-            DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //public List<MyListMovie> getProductsAtCustomer(int cn, int lngid, int device)
+        //{
+        //    string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+        //    DVdPostMobileApIWS modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-            try
-            {
-                Utilities.InsertMobileLog(cn, "getProductsAtCustomer", lngid.ToString(), device,modelcontext);
+        //    try
+        //    {
+        //        Utilities.InsertMobileLog(cn, "getProductsAtCustomer", lngid.ToString(), device,modelcontext);
 
-                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
-                IEnumerable<MyListMovie> dvdch = modelcontext.ExecuteQuery<MyListMovie>("CALL sp_products_at_customer({0},{1})", cn, lngid);
-                return dvdch.ToList<MyListMovie>();
+        //        modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+        //        IEnumerable<MyListMovie> dvdch = modelcontext.ExecuteQuery<MyListMovie>("CALL sp_products_at_customer({0},{1})", cn, lngid);
+        //        return dvdch.ToList<MyListMovie>();
 
-            }
-            catch (Exception ex)
-            {
-                this._hosteventLog = new System.Diagnostics.EventLog();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
-                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
-                _hosteventLog.Source = "PlushServiceSource";
-                _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getProductsAtCustomer. cn, lngid :   " + cn + ", " + lngid, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("getProductsAtCustomer.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
-                if (ex.InnerException != null)
-                {
-                    _hosteventLog.WriteEntry("getProductsAtCustomer InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
-                }
-                return null;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this._hosteventLog = new System.Diagnostics.EventLog();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+        //        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+        //        _hosteventLog.Source = "PlushServiceSource";
+        //        _hosteventLog.Log = "PlushServiceLog";
+        //        _hosteventLog.WriteEntry("getProductsAtCustomer. cn, lngid :   " + cn + ", " + lngid, System.Diagnostics.EventLogEntryType.Error);
+        //        _hosteventLog.WriteEntry("getProductsAtCustomer.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        if (ex.InnerException != null)
+        //        {
+        //            _hosteventLog.WriteEntry("getProductsAtCustomer InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+        //        }
+        //        return null;
+        //    }
+        //}
 
         public int addMovieSeen(int imdb_id, int disk_id, int season_id, int cn)
         {
@@ -1844,6 +1850,8 @@ namespace PlushService
                 contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
                 string sqlRemoveWishlist = QueriesDB.GetDeleteVodWishlist(imdb_id, cn);
                 //
+                Utilities.InsertMobileLog(cn, "RemoveVodFromWishlist cn, imdb_id", cn + ", " + imdb_id, 0); 
+
                 return contextBeProd.ExecuteCommand(sqlRemoveWishlist);
             }
             catch (Exception ex)
@@ -1853,11 +1861,11 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("RemoveProdFromWishlist. imdb_id_serie, cn:   " + imdb_id + ", " + cn, System.Diagnostics.EventLogEntryType.Error);
-                _hosteventLog.WriteEntry("RemoveProdFromWishlist.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("RemoveVodFromWishlist. imdb_id_serie, cn:   " + imdb_id + ", " + cn, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("RemoveVodFromWishlist.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
-                    _hosteventLog.WriteEntry("RemoveProdFromWishlist InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                    _hosteventLog.WriteEntry("RemoveVodFromWishlist InnerException: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
                 }
                 return 0;
             }
@@ -1913,13 +1921,14 @@ namespace PlushService
                 //
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_new_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
+                Utilities.InsertMobileLog(cn, "getMoMoviesNewTitles", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
 
                 if (tvod != null && svod != null)
                 {
@@ -1943,7 +1952,7 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMoviesNewTitles. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMoviesNewTitles. lngid:   " + lngid + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), System.Diagnostics.EventLogEntryType.Error);
                 _hosteventLog.WriteEntry("getMoviesNewTitles.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
@@ -1963,7 +1972,9 @@ namespace PlushService
             {
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));               
                 result = modelcontext.ExecuteQuery<FreeMovie>("CALL sp_free_movie({0},{1},{2})", lngid, Utilities.GetClientCoutry(), cn);
-                
+
+                Utilities.InsertMobileLog(cn, "getMovieFree", lngid.ToString(), device, modelcontext); 
+
                 return result.ToList<FreeMovie>();
             }
             catch (Exception ex)
@@ -2051,12 +2062,12 @@ namespace PlushService
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_tvod({0},{1},{2}, {3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_tvod({0},{1},{2}, {3})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                    svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_all_movies_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
               
                 if (tvod != null && svod != null)
@@ -2145,6 +2156,8 @@ namespace PlushService
 
                 //return mm.ToList<ListMovie>();
 
+                Utilities.InsertMobileLog(cn, "getMoviesLastAdded", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
+
                 if (show_tvod)
                 {
                     tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_last_added_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
@@ -2203,6 +2216,9 @@ namespace PlushService
                 
                 //return mm.ToList<ListMovie>();
 
+                Utilities.InsertMobileLog(cn, "getMostPopularMovies", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
+                
+
                 if (show_tvod)
                 {
                     tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_most_rented_movies_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
@@ -2235,7 +2251,7 @@ namespace PlushService
                 ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
                 _hosteventLog.Source = "PlushServiceSource";
                 _hosteventLog.Log = "PlushServiceLog";
-                _hosteventLog.WriteEntry("getMostPopularMovies. lngid:   " + lngid, System.Diagnostics.EventLogEntryType.Error);
+                _hosteventLog.WriteEntry("getMostPopularMovies. lngid, cn, device:   " + lngid + cn + ", " + device, System.Diagnostics.EventLogEntryType.Error);
                 _hosteventLog.WriteEntry("getMostPopularMovies.Exception: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
                 if (ex.InnerException != null)
                 {
@@ -2318,7 +2334,7 @@ namespace PlushService
                 //mm = modelcontext.ExecuteQuery<ListMovie>("CALL sp_our_movies_vod({0},{1},{2},{3},{4})", lngid, Utilities.GetClientCoutry(), show_tvod, show_svod, cn).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                
                 //return mm.ToList<ListMovie>();
-
+                Utilities.InsertMobileLog(cn, "getOurFavoritesMovies", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
 
                 if (show_tvod)
                 {
@@ -2404,15 +2420,19 @@ namespace PlushService
             {
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
+                Utilities.InsertMobileLog(cn, "getMoviesSoon", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
+
                 //IEnumerable<ListMovie> mm = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie({0},{1})", lngid, Utilities.GetClientCoutry()).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 //return mm.ToList<ListMovie>();
                 if (show_tvod)
                 {
+                    //tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_tvod({0},{1},{2},{3},{4},{5})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize);
                     tvod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_tvod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
                 if (show_svod)
                 {
+                    //svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_svod({0},{1},{2},{3},{4},{5})", lngid, Utilities.GetClientCoutry(), cn, device, pageNumber, pageSize);
                     svod = modelcontext.ExecuteQuery<ListMovie>("CALL sp_soon_movie_svod({0},{1},{2},{3})", lngid, Utilities.GetClientCoutry(), cn, device).Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 }
 
@@ -2489,7 +2509,7 @@ namespace PlushService
 
                 Utilities.InsertMobileLog(cn, "getVodAtCustomer", lngid.ToString (), device, modelcontext); 
 
-                IEnumerable<VodAtCustomer> recomandList = modelcontext.ExecuteQuery<VodAtCustomer>("CALL sp_vod_at_customer({0},{1})", cn, lngid);
+                IEnumerable<VodAtCustomer> recomandList = modelcontext.ExecuteQuery<VodAtCustomer>("CALL sp_vod_at_customer({0},{1},{2})", cn, lngid, device);
 
                 lm = recomandList.ToList<VodAtCustomer>();
                 return lm;
@@ -2525,7 +2545,7 @@ namespace PlushService
 
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                Utilities.InsertMobileLog(cn, "getCustVodWishList", lngid.ToString(), device, modelcontext); 
+                Utilities.InsertMobileLog(cn, "getCustVodWishList", lngid.ToString() + ", show_svod = " + show_svod.ToString() + ",  show_tvod =  " + show_tvod.ToString(), device, modelcontext); 
 
                 //IEnumerable<CustVodWishList> recomandList = modelcontext.ExecuteQuery<CustVodWishList>("CALL sp_customer_vod_wishlist({0},{1})", cn, lngid);
 
@@ -2533,12 +2553,12 @@ namespace PlushService
                 //return lm;
                 if (show_tvod)
                 {
-                    tvod = modelcontext.ExecuteQuery<CustVodWishList>("CALL sp_customer_vod_wishlist_tvod({0},{1})", cn, lngid);
+                    tvod = modelcontext.ExecuteQuery<CustVodWishList>("CALL sp_customer_vod_wishlist_tvod({0},{1},{2})", cn, lngid, device);
                 }
 
                 if (show_svod)
                 {
-                    svod = modelcontext.ExecuteQuery<CustVodWishList>("CALL sp_customer_vod_wishlist_svod({0},{1})", cn, lngid);
+                    svod = modelcontext.ExecuteQuery<CustVodWishList>("CALL sp_customer_vod_wishlist_svod({0},{1},{2})", cn, lngid, device);
                 }
 
                 if (tvod != null && svod != null)
@@ -3178,7 +3198,7 @@ namespace PlushService
 
         }
 
-        public List<ListMovieWatched> getCustWatched(int cn, int lngid, int pageNumber, int pageSize)
+        public List<ListMovieWatched> getCustWatched(int cn, int lngid,  int device, int pageNumber, int pageSize)
         {
             List<ListMovieWatched> lm = new List<ListMovieWatched>();
             DVdPostMobileApIWS modelcontext = null;
@@ -3188,7 +3208,9 @@ namespace PlushService
 
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
 
-                IEnumerable<ListMovieWatched> recomandList = modelcontext.ExecuteQuery<ListMovieWatched>("CALL sp_customer_watched_tomobile({0},{1},{2})", lngid, cn, Utilities.GetClientCoutry()).Skip((pageNumber - 1) * pageSize).Take(pageSize); ;
+                IEnumerable<ListMovieWatched> recomandList = modelcontext.ExecuteQuery<ListMovieWatched>("CALL sp_customer_watched_tomobile({0},{1},{2},{3})", lngid, cn, Utilities.GetClientCoutry(),device).Skip((pageNumber - 1) * pageSize).Take(pageSize); ;
+
+                Utilities.InsertMobileLog(cn, "getCustWatched", lngid.ToString(), device, modelcontext); 
 
                 lm = recomandList.ToList<ListMovieWatched>();
                 return lm;
@@ -3255,6 +3277,8 @@ namespace PlushService
                 else
                     vodch = modelcontext.ExecuteQuery<VODChannel>("CALL spmovie_vod_products_2({0},{1},{2},{3},{4})", imdb_id, disk_id, season_id, lngid, Utilities.GetClientCoutry());
 
+                Utilities.InsertMobileLog(cn, "getVODLanguages", imdb_id.ToString() + ", " + season_id.ToString() + ",  " + disk_id.ToString() + ", " +lngid.ToString(), 0, modelcontext); 
+
                 if (vodch == null || vodch.Count() == 0)
                     return null;
                 else
@@ -3297,6 +3321,8 @@ namespace PlushService
 
                 modelcontext.ObjectTrackingEnabled = false;
                 modelcontext.QueryCacheEnabled = true;
+
+                Utilities.InsertMobileLog(cn, "getHomePage lngid ", lngid.ToString() , device, modelcontext); 
 
                 var hpmenuVar = from ctg in modelcontext.HpMenu
                               where ctg.LanguageID == lngid && ctg.Available == 1
@@ -3425,8 +3451,6 @@ namespace PlushService
 
                 }
 
-                return hp;
-
             }
             catch (Exception ex)
             {
@@ -3443,6 +3467,38 @@ namespace PlushService
                 }
                 return null;
             }
+
+            if (device == 8)
+            {
+                hp.pstrailers = new List<hptrailer>(); 
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        hptrailer hptr = modelcontext.ExecuteQuery<hptrailer>("CALL sp_hptrailer({0})", lngid).First<hptrailer>();                        
+
+                        hp.pstrailers.Add(hptr);
+                    }
+                    catch (Exception ex)
+                    {
+                        this._hosteventLog = new System.Diagnostics.EventLog();
+                        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                        ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                        _hosteventLog.Source = "PlushServiceSource";
+                        _hosteventLog.Log = "PlushServiceLog";
+                        _hosteventLog.WriteEntry("getHomePage. 2 lngid, cn: " + lngid + ", " + cn, System.Diagnostics.EventLogEntryType.Error);
+                        _hosteventLog.WriteEntry("getHomePage.Exception 2: " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                        if (ex.InnerException != null)
+                        {
+                            _hosteventLog.WriteEntry("getHomePage InnerException 2: " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                        }
+                        return null;
+                    }
+                      
+                }
+            }
+
+            return hp;
         }
 
         public CataloguePage_1 getCataloguePage_1(int lngid, int cn, int device, int vodOnly)
@@ -3619,13 +3675,16 @@ namespace PlushService
             return (Utilities.GetClientCoutry() != "US" && Boolean.Parse(ConfigurationManager.AppSettings["ShowRegistration"]));
         }
 
-        public int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr)
+        public int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr, int lngid)
         {
             int newCustomersID;
             string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
             DVdPostMobileApIWS modelcontext = null;
             CustomerDetails cd = new CustomerDetails();
-
+            if (lngid == 0)
+            {
+                lngid = 1;
+            }
             try
             {
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
@@ -3634,7 +3693,15 @@ namespace PlushService
                 IEnumerable<CustomerDetailsRow> cdr = modelcontext.ExecuteQuery<CustomerDetailsRow>("CALL sp_customer_get({0},{1})", em, string.Empty);
 
                 if (cdr.Count() > 0)
+                {
+                    CustomerDetailsRow cdrReactivate = cdr.First<CustomerDetailsRow>();
+                    if (cdrReactivate.isac == 0)
+                    {
+                        newCustomersID = SetOLDSVODCustomer(em, pswd, lngid);
+                        return newCustomersID;
+                    }
                     return -1;
+                }
             }
             catch (Exception ex2)
             {
@@ -3650,23 +3717,37 @@ namespace PlushService
                 }
                 return 0;
             }
+
+            newCustomersID = SetSVODCustomer(em, pswd, lngid);
+
+            return newCustomersID;
+
+        }
+
+        private int SetSVODCustomer(string em, string pswd, int lngid)
+        {
+            int newCustomersID;
+            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+            DVdPostMobileApIWS modelcontext = null;
             string[] tvodproductsarray = new string[4];
-            tvodproducts tvodproducts = new tvodproducts ();
+            tvodproducts tvodproducts = new tvodproducts();
+            //
+            string[] tvodproductsarrayimages = new string[4];
+            tvodproducts tvodproductsimages = new tvodproducts();
 
             IEnumerable<tvodproducts> resultTVODProducts;
+
             try
             {
-
                 modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
                 modelcontext.ObjectTrackingEnabled = false;
                 modelcontext.QueryCacheEnabled = true;
 
-                string encryptedPass = "Utilities.BCryptPassword(pswd)";
-                newCustomersID = modelcontext.ExecuteCommand("CALL sp_TVODcustomer_subscription({0},{1})", em, encryptedPass);
+                string encryptedPass = "";
+                newCustomersID = modelcontext.ExecuteCommand("CALL sp_TVODcustomer_subscription({0},{1},{2})", em, encryptedPass, lngid);
 
                 string strSQLTVODProducts = QueriesDB.getTVODAnyoneProducts();
-                resultTVODProducts = modelcontext.ExecuteQuery<tvodproducts>(strSQLTVODProducts);                
-
+                resultTVODProducts = modelcontext.ExecuteQuery<tvodproducts>(strSQLTVODProducts);
             }
             catch (Exception ex)
             {
@@ -3731,7 +3812,7 @@ namespace PlushService
                 dr["products_id3_img"] = resultTVODProducts.ToArray()[2].products_image_big;
                 dr["products_id4_img"] = resultTVODProducts.ToArray()[3].products_image_big;
                 dr["email"] = em;
-                dr["customers_language"] = 1;
+                dr["customers_language"] = lngid;
                 dr["Customers_id"] = newCustomersID;
 
 
@@ -3755,8 +3836,124 @@ namespace PlushService
             }
 
             return newCustomersID;
-
         }
+
+        private int SetOLDSVODCustomer(string em, string pswd, int lngid)
+        {
+            int newCustomersID;
+            string connstr = ConfigurationManager.ConnectionStrings["mobileapiws"].ConnectionString;
+            DVdPostMobileApIWS modelcontext = null;
+            string[] tvodproductsarray = new string[4];
+            tvodproducts tvodproducts = new tvodproducts();
+            //
+            string[] tvodproductsarrayimages = new string[4];
+            tvodproducts tvodproductsimages = new tvodproducts();
+
+            IEnumerable<tvodproducts> resultTVODProducts;
+
+            try
+            {
+                modelcontext = new DVdPostMobileApIWS(new MySqlConnection(connstr));
+                modelcontext.ObjectTrackingEnabled = false;
+                modelcontext.QueryCacheEnabled = true;
+
+                string encryptedPass = "";
+                newCustomersID = modelcontext.ExecuteCommand("CALL sp_OLDTVODcustomer_subscription({0},{1},{2})", em, encryptedPass, lngid);
+
+                string strSQLTVODProducts = QueriesDB.getTVODAnyoneProducts();
+                resultTVODProducts = modelcontext.ExecuteQuery<tvodproducts>(strSQLTVODProducts);
+                Utilities.InsertMobileLog(newCustomersID, "SetOLDSVODCustomer 2.2.1 ", "", lngid);
+            }
+            catch (Exception ex)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("SetOLDSVODCustomer.Exception: 2 em, pswd: " + em + ", " + pswd + ", error " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("SetOLDSVODCustomer InnerException: 2 " + ex.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return 0;
+            }
+            try
+            {
+                DVdPostMobileApIWS contextBeProd = null;
+                string connstr_prod = ConfigurationManager.ConnectionStrings["prod-WRITE"].ConnectionString;
+                contextBeProd = new DVdPostMobileApIWS(new MySqlConnection(connstr_prod));
+                contextBeProd.ObjectTrackingEnabled = false;
+                contextBeProd.QueryCacheEnabled = true;
+
+                Utilities.InsertMobileLog(newCustomersID, "SetOLDSVODCustomer 2.2.2 ", "", lngid);
+                // send email
+                DataTable dt = new DataTable("customermail");
+                dt.Columns.Add("customers_firstname", typeof(string));
+                dt.Columns.Add("customers_lastname", typeof(string));
+                dt.Columns.Add("customers_name", typeof(string));
+                dt.Columns.Add("customers_gender", typeof(string));
+                dt.Columns.Add("products_id1", typeof(string));
+                dt.Columns.Add("products_id2", typeof(string));
+                dt.Columns.Add("products_id3", typeof(string));
+                dt.Columns.Add("products_id4", typeof(string));
+                dt.Columns.Add("products_id1_name", typeof(string));
+                dt.Columns.Add("products_id2_name", typeof(string));
+                dt.Columns.Add("products_id3_name", typeof(string));
+                dt.Columns.Add("products_id4_name", typeof(string));
+                dt.Columns.Add("products_id1_img", typeof(string));
+                dt.Columns.Add("products_id2_img", typeof(string));
+                dt.Columns.Add("products_id3_img", typeof(string));
+                dt.Columns.Add("products_id4_img", typeof(string));
+                dt.Columns.Add("email", typeof(string));
+                dt.Columns.Add("customers_language", typeof(int));
+                dt.Columns.Add("Customers_id", typeof(int));
+
+                DataRow dr = dt.NewRow();
+                dr["customers_firstname"] = string.Empty;
+                dr["customers_lastname"] = string.Empty;
+                dr["customers_name"] = string.Empty;
+                dr["customers_gender"] = string.Empty;
+                dr["products_id1"] = resultTVODProducts.ToArray()[0].products_id;
+                dr["products_id2"] = resultTVODProducts.ToArray()[1].products_id;
+                dr["products_id3"] = resultTVODProducts.ToArray()[2].products_id;
+                dr["products_id4"] = resultTVODProducts.ToArray()[3].products_id;
+                dr["products_id1_name"] = resultTVODProducts.ToArray()[0].products_name;
+                dr["products_id2_name"] = resultTVODProducts.ToArray()[1].products_name;
+                dr["products_id3_name"] = resultTVODProducts.ToArray()[2].products_name;
+                dr["products_id4_name"] = resultTVODProducts.ToArray()[3].products_name;
+                dr["products_id1_img"] = resultTVODProducts.ToArray()[0].products_image_big;
+                dr["products_id2_img"] = resultTVODProducts.ToArray()[1].products_image_big;
+                dr["products_id3_img"] = resultTVODProducts.ToArray()[2].products_image_big;
+                dr["products_id4_img"] = resultTVODProducts.ToArray()[3].products_image_big;
+                dr["email"] = em;
+                dr["customers_language"] = lngid;
+                dr["Customers_id"] = newCustomersID;
+
+
+                PlushData.clsConnection.typeEnv = "prod";
+                PlushBuziness.clsMail.SendMail(dr, PlushBuziness.clsMail.Mail.MAIL_PLUSH_TVOD_TO_ANYONE_WELCOME, true, string.Empty, string.Empty, string.Empty);
+                Utilities.InsertMobileLog(newCustomersID, "SetOLDSVODCustomer 2.2.3 ", "", lngid);
+
+            }
+            catch (Exception ex3)
+            {
+                this._hosteventLog = new System.Diagnostics.EventLog();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).BeginInit();
+                ((System.ComponentModel.ISupportInitialize)(this._hosteventLog)).EndInit();
+                _hosteventLog.Source = "PlushHTTPSServiceSource";
+                _hosteventLog.Log = "PlushHTTPSServiceLog";
+                _hosteventLog.WriteEntry("SetOLDSVODCustomer.Exception: 3 em, pswd: " + em + ", " + pswd + ", error " + ex3.Message, System.Diagnostics.EventLogEntryType.Error);
+                if (ex3.InnerException != null)
+                {
+                    _hosteventLog.WriteEntry("SetOLDSVODCustomer InnerException: 3 " + ex3.InnerException.Message, System.Diagnostics.EventLogEntryType.Error);
+                }
+                return 0;
+            }
+
+            return newCustomersID;
+        }
+
 
         public VodTokenLengs TVODPayAndGetVodTokenAndLngs(int imdb_id, int disk_id, int season_id, string amount, string card_type, string card_no, string card_ed, string card_owner, string cvc, int cn, int device)
         {

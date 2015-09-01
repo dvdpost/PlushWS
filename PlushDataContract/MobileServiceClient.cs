@@ -30,54 +30,54 @@ namespace PlushContract
 
         ///////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetBestReviewers(int lngid, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetBestReviewers(lngid, callback, asyncState);
-        }
+        //public IAsyncResult BegingetBestReviewers(int lngid, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetBestReviewers(lngid, callback, asyncState);
+        //}
 
-        public List<BestReviewer> EndgetBestReviewers(IAsyncResult result)
-        {
-            return this.Channel.EndgetBestReviewers(result);
-        }
+        //public List<BestReviewer> EndgetBestReviewers(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetBestReviewers(result);
+        //}
 
-        public List<BestReviewer> getBestReviewers(int lngid)
-        {
-            return this.Channel.getBestReviewers(lngid);
-        }
-
-        ///////////////////////////////////////////////////////////////
-
-        public IAsyncResult BegingetBestReviews(int lngid, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetBestReviews(lngid, callback, asyncState);
-        }
-
-        public List<BestReview> EndgetBestReviews(IAsyncResult result)
-        {
-            return this.Channel.EndgetBestReviews(result);
-        }
-
-        public List<BestReview> getBestReviews(int lngid)
-        {
-            return this.Channel.getBestReviews(lngid);
-        }
+        //public List<BestReviewer> getBestReviewers(int lngid)
+        //{
+        //    return this.Channel.getBestReviewers(lngid);
+        //}
 
         ///////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetMostDiscussed(int lngid, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetMostDiscussed(lngid, callback, asyncState);
-        }
+        //public IAsyncResult BegingetBestReviews(int lngid, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetBestReviews(lngid, callback, asyncState);
+        //}
 
-        public List<MostDiscussedMovies> EndgetMostDiscussed(IAsyncResult result)
-        {
-            return this.Channel.EndgetMostDiscussed(result);
-        }
+        //public List<BestReview> EndgetBestReviews(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetBestReviews(result);
+        //}
 
-        public List<MostDiscussedMovies> getMostDiscussed(int lngid)
-        {
-            return this.Channel.getMostDiscussed(lngid);
-        }        
+        //public List<BestReview> getBestReviews(int lngid)
+        //{
+        //    return this.Channel.getBestReviews(lngid);
+        //}
+
+        ///////////////////////////////////////////////////////////////
+
+        //public IAsyncResult BegingetMostDiscussed(int lngid, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetMostDiscussed(lngid, callback, asyncState);
+        //}
+
+        //public List<MostDiscussedMovies> EndgetMostDiscussed(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetMostDiscussed(result);
+        //}
+
+        //public List<MostDiscussedMovies> getMostDiscussed(int lngid)
+        //{
+        //    return this.Channel.getMostDiscussed(lngid);
+        //}        
 
         ///////////////////////////////////////////////////////////////
 
@@ -131,28 +131,28 @@ namespace PlushContract
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetListMovies(string search, int publicDown, int publicUp,
-                                                    string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,
-                                                    int ourfavorite, string audios, string titles, int lngid, int pageNumber, int pageSize, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetListMovies(search, publicDown, publicUp,
-                                                     technologys, countryID, yearDown, yearUp, ratingDown, ratingUp,
-                                                     ourfavorite, audios, titles, lngid, pageNumber, pageSize, callback, asyncState);
-        }
+        //public IAsyncResult BegingetListMovies(string search, int publicDown, int publicUp,
+        //                                            string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,
+        //                                            int ourfavorite, string audios, string titles, int lngid, int pageNumber, int pageSize, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetListMovies(search, publicDown, publicUp,
+        //                                             technologys, countryID, yearDown, yearUp, ratingDown, ratingUp,
+        //                                             ourfavorite, audios, titles, lngid, pageNumber, pageSize, callback, asyncState);
+        //}
 
-        public List<ListMovie> EndgetListMovies(IAsyncResult result)
-        {
-            return this.Channel.EndgetListMovies(result);
-        }
+        //public List<ListMovie> EndgetListMovies(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetListMovies(result);
+        //}
 
-        public List<ListMovie> getListMovies(string search, int publicDown, int publicUp,
-                                                    string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,
-                                                    int ourfavorite, string audios, string titles, int lngid, int pageNumber, int pageSize)
-        {
-            return this.Channel.getListMovies(search, publicDown, publicUp,
-                                                     technologys, countryID, yearDown, yearUp, ratingDown, ratingUp,
-                                                     ourfavorite, audios, titles, lngid, pageNumber, pageSize);
-        }
+        //public List<ListMovie> getListMovies(string search, int publicDown, int publicUp,
+        //                                            string technologys, int countryID, int yearDown, int yearUp, int ratingDown, int ratingUp,
+        //                                            int ourfavorite, string audios, string titles, int lngid, int pageNumber, int pageSize)
+        //{
+        //    return this.Channel.getListMovies(search, publicDown, publicUp,
+        //                                             technologys, countryID, yearDown, yearUp, ratingDown, ratingUp,
+        //                                             ourfavorite, audios, titles, lngid, pageNumber, pageSize);
+        //}
 
         ////////////////////////////////////////////////////////////
 
@@ -309,20 +309,20 @@ namespace PlushContract
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetCustRecommendations(int cn, int lngid, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetCustRecommendations(cn, lngid, callback, asyncState);
-        }
+        //public IAsyncResult BegingetCustRecommendations(int cn, int lngid, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetCustRecommendations(cn, lngid, callback, asyncState);
+        //}
 
-        public List<ListMovie> EndgetCustRecommendations(IAsyncResult result)
-        {
-            return this.Channel.EndgetCustRecommendations(result);
-        }
+        //public List<ListMovie> EndgetCustRecommendations(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetCustRecommendations(result);
+        //}
 
-        public List<ListMovie> getCustRecommendations(int cn, int lngid)
-        {
-            return this.Channel.getCustRecommendations(cn, lngid);
-        }
+        //public List<ListMovie> getCustRecommendations(int cn, int lngid)
+        //{
+        //    return this.Channel.getCustRecommendations(cn, lngid);
+        //}
 
         ////////////////////////////////////////////////////////////
 
@@ -343,37 +343,37 @@ namespace PlushContract
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetCustProdWishList(int lngid, int cn, int device, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetCustProdWishList(lngid, cn, device, callback, asyncState);
-        }
+        //public IAsyncResult BegingetCustProdWishList(int lngid, int cn, int device, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetCustProdWishList(lngid, cn, device, callback, asyncState);
+        //}
 
-        public List<MyListMovie> EndgetCustProdWishList(IAsyncResult result)
-        {
-            return this.Channel.EndgetCustProdWishList(result);
-        }
+        //public List<MyListMovie> EndgetCustProdWishList(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetCustProdWishList(result);
+        //}
 
-        public List<MyListMovie> getCustProdWishList(int lngid, int cn, int device)
-        {
-            return this.Channel.getCustProdWishList(lngid, cn, device);
-        }
+        //public List<MyListMovie> getCustProdWishList(int lngid, int cn, int device)
+        //{
+        //    return this.Channel.getCustProdWishList(lngid, cn, device);
+        //}
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BeginaddProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BeginaddProductToWishList(pdid, prty, wlsrcid, cn, device, callback, asyncState);
-        }
+        //public IAsyncResult BeginaddProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BeginaddProductToWishList(pdid, prty, wlsrcid, cn, device, callback, asyncState);
+        //}
 
-        public int EndaddProductToWishList(IAsyncResult result)
-        {
-            return this.Channel.EndaddProductToWishList(result);
-        }
+        //public int EndaddProductToWishList(IAsyncResult result)
+        //{
+        //    return this.Channel.EndaddProductToWishList(result);
+        //}
 
-        public int addProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device)
-        {
-            return this.Channel.addProductToWishList(pdid, prty, wlsrcid, cn, device);
-        }
+        //public int addProductToWishList(int pdid, int prty, int wlsrcid, int cn, int device)
+        //{
+        //    return this.Channel.addProductToWishList(pdid, prty, wlsrcid, cn, device);
+        //}
 
         ////////////////////////////////////////////////////////////
 
@@ -394,54 +394,54 @@ namespace PlushContract
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetMovieDVDBlueRay( imdb_id_serie,  disk_id,  season_id, callback, asyncState);
-        }
+        //public IAsyncResult BegingetMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetMovieDVDBlueRay( imdb_id_serie,  disk_id,  season_id, callback, asyncState);
+        //}
 
-        public List<DVDChannel> EndgetMovieDVDBlueRay(IAsyncResult result)
-        {
-            return this.Channel.EndgetMovieDVDBlueRay(result);
-        }
+        //public List<DVDChannel> EndgetMovieDVDBlueRay(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetMovieDVDBlueRay(result);
+        //}
 
-        public List<DVDChannel> getMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id)
-        {
-            return this.Channel.getMovieDVDBlueRay( imdb_id_serie,  disk_id,  season_id);
-        }
-
-        ////////////////////////////////////////////////////////////
-
-        public IAsyncResult BegingetMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetMovieDVDBlueRay_1(imdb_id_serie, disk_id, season_id, lngid, callback, asyncState);
-        }
-
-        public List<DVDChannel> EndgetMovieDVDBlueRay_1(IAsyncResult result)
-        {
-            return this.Channel.EndgetMovieDVDBlueRay_1(result);
-        }
-
-        public List<DVDChannel> getMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid)
-        {
-            return this.Channel.getMovieDVDBlueRay_1(imdb_id_serie, disk_id, season_id, lngid);
-        }
+        //public List<DVDChannel> getMovieDVDBlueRay(int imdb_id_serie, int disk_id, int season_id)
+        //{
+        //    return this.Channel.getMovieDVDBlueRay( imdb_id_serie,  disk_id,  season_id);
+        //}
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetProductsAtCustomer(int cn, int lngid, int device, AsyncCallback callback, object asyncState)
-        {
-            return this.Channel.BegingetProductsAtCustomer( cn,  lngid, device, callback, asyncState);
-        }
+        //public IAsyncResult BegingetMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetMovieDVDBlueRay_1(imdb_id_serie, disk_id, season_id, lngid, callback, asyncState);
+        //}
 
-        public List<MyListMovie> EndgetProductsAtCustomer(IAsyncResult result)
-        {
-            return this.Channel.EndgetProductsAtCustomer(result);
-        }
+        //public List<DVDChannel> EndgetMovieDVDBlueRay_1(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetMovieDVDBlueRay_1(result);
+        //}
 
-        public List<MyListMovie> getProductsAtCustomer(int cn, int lngid, int device)
-        {
-            return this.Channel.getProductsAtCustomer(cn, lngid, device);
-        }
+        //public List<DVDChannel> getMovieDVDBlueRay_1(int imdb_id_serie, int disk_id, int season_id, int lngid)
+        //{
+        //    return this.Channel.getMovieDVDBlueRay_1(imdb_id_serie, disk_id, season_id, lngid);
+        //}
+
+        ////////////////////////////////////////////////////////////
+
+        //public IAsyncResult BegingetProductsAtCustomer(int cn, int lngid, int device, AsyncCallback callback, object asyncState)
+        //{
+        //    return this.Channel.BegingetProductsAtCustomer( cn,  lngid, device, callback, asyncState);
+        //}
+
+        //public List<MyListMovie> EndgetProductsAtCustomer(IAsyncResult result)
+        //{
+        //    return this.Channel.EndgetProductsAtCustomer(result);
+        //}
+
+        //public List<MyListMovie> getProductsAtCustomer(int cn, int lngid, int device)
+        //{
+        //    return this.Channel.getProductsAtCustomer(cn, lngid, device);
+        //}
 
         ////////////////////////////////////////////////////////////
 
@@ -1023,9 +1023,9 @@ namespace PlushContract
 
         ////////////////////////////////////////////////////////////
 
-        public IAsyncResult BegingetCustWatched(int cn, int lngid, int pageNumber, int pageSize, AsyncCallback callback, object asyncState)
+        public IAsyncResult BegingetCustWatched(int cn, int lngid, int device, int pageNumber, int pageSize, AsyncCallback callback, object asyncState)
         {
-            return this.Channel.BegingetCustWatched(cn, lngid, pageNumber, pageSize, callback, asyncState);
+            return this.Channel.BegingetCustWatched(cn, lngid, device, pageNumber, pageSize, callback, asyncState);
         }
 
         public List<ListMovieWatched> EndgetCustWatched(IAsyncResult result)
@@ -1033,9 +1033,9 @@ namespace PlushContract
             return this.Channel.EndgetCustWatched(result);
         }
 
-        public List<ListMovieWatched> getCustWatched(int cn, int lngid, int pageNumber, int pageSize)
+        public List<ListMovieWatched> getCustWatched(int cn, int lngid, int device, int pageNumber, int pageSize)
         {
-            return this.Channel.getCustWatched(cn, lngid, pageNumber, pageSize);
+            return this.Channel.getCustWatched(cn, lngid, device, pageNumber, pageSize);
         }
 
         ////////////////////////////////////////////////////////////
@@ -1169,9 +1169,9 @@ namespace PlushContract
             return this.Channel.EndsetTVODCustomerSubscription(result);
         }
 
-        public int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr)
+        public int setTVODCustomerSubscription(string em, string pswd, int device, string dvcnmbr, int lngid)
         {
-            return this.Channel.setTVODCustomerSubscription( em, pswd, device, dvcnmbr);
+            return this.Channel.setTVODCustomerSubscription( em, pswd, device, dvcnmbr, lngid);
         }
     }
 }

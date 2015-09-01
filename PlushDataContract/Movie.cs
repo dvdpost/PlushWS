@@ -177,7 +177,7 @@ namespace PlushContract
     public class FreeMovie
     {
         [DataMember]
-        public int imdb_id { get; set; }
+        public string imdb_id { get; set; }
 
         [DataMember]
         public int? disk_id { get; set; }
@@ -386,6 +386,19 @@ namespace PlushContract
     [DataContract]
     public class VodTokenLengs // Vod Token and Languages
     {
+        [DataMember]
+        public string t { get; set; } // token
+
+        [DataMember]
+        public string a { get; set; } // list audio-subtitile pairs ','-pair separator, ':'- pair elements' (id:audio short alpha:subtitle sort alpha )separator
+    }
+
+    [DataContract]
+    public class VodTokenAuthXMLLengs // Vod Token and Languages
+    {
+        [DataMember]
+        public string authxml { get; set; } // authorisation xml
+
         [DataMember]
         public string t { get; set; } // token
 
